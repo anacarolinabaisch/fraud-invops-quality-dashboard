@@ -47,7 +47,22 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
 .insight-card p{font-size:12px;color:var(--tx2);line-height:1.5}
 .insight-card .num{font-weight:700;color:var(--pu)}
 .filter-tag{display:inline-block;background:var(--pu2);color:var(--pu);padding:3px 10px;border-radius:12px;font-size:10px;font-weight:600;margin-left:8px}
-@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.hdr,.filters,.kpis,.g,.sec{padding-left:16px;padding-right:16px}}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--bd);padding:0 36px}
+.tab-btn{padding:12px 24px;font-size:13px;font-weight:600;color:var(--tx2);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;font-family:inherit}
+.tab-btn:hover{color:var(--tx)}
+.tab-btn.active{color:var(--pu);border-bottom-color:var(--pu)}
+.tab-content{display:none}.tab-content.active{display:block}
+.rev-table th{background:var(--s2);position:sticky;top:0;z-index:1}
+.rev-highlight{background:rgba(239,68,68,.08)}
+.rev-bar{display:flex;height:20px;border-radius:4px;overflow:hidden;min-width:60px}
+.rev-bar .seg{transition:width .3s}
+.district-card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px;margin-bottom:12px}
+.district-card h4{font-size:13px;font-weight:600;margin-bottom:4px}
+.district-card .stat{display:flex;gap:24px;margin-top:8px;flex-wrap:wrap}
+.district-card .stat-item{text-align:center}
+.district-card .stat-item .val{font-size:22px;font-weight:700}
+.district-card .stat-item .lbl{font-size:10px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.hdr,.filters,.kpis,.g,.sec,.tabs{padding-left:16px;padding-right:16px}}
 </style>
 </head>
 <body>
@@ -59,6 +74,12 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
   </div>
 </div>
 
+<div class="tabs">
+  <button class="tab-btn active" data-tab="erros">Análise de Erros</button>
+  <button class="tab-btn" data-tab="reversoes">Reversões (Global)</button>
+</div>
+
+<div class="tab-content active" id="tab-erros">
 <div class="filters">
   <div class="fgroup"><label>Meses:</label>
     <div class="month-btns" id="monthBtns">
@@ -129,6 +150,66 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
 </div>
 
 <div style="height:50px"></div>
+</div><!-- /tab-erros -->
+
+<div class="tab-content" id="tab-reversoes">
+<div class="filters">
+  <div class="fgroup"><label>Meses:</label>
+    <div class="month-btns" id="revMonthBtns">
+      <button class="month-btn active" data-m="2026-01">Jan</button>
+      <button class="month-btn active" data-m="2026-02">Fev</button>
+      <button class="month-btn active" data-m="2026-03">Mar</button>
+    </div>
+  </div>
+  <div class="fgroup"><label>Distrito:</label>
+    <select id="fDistrict">
+      <option value="all">Todos os Distritos</option>
+      <option value="Gamers">Gamers</option>
+      <option value="Identity Fraud">Identity Fraud</option>
+      <option value="Mule Account">Mule Account</option>
+      <option value="Transactional">Transactional</option>
+      <option value="Victims Prevention">Victims Prevention</option>
+    </select>
+  </div>
+  <div id="revActiveFilters" style="font-size:11px;color:var(--tx3)"></div>
+</div>
+
+<div class="kpis" id="revKpiRow"></div>
+
+<div class="sec">Reversões por Distrito</div>
+<div class="g g2">
+  <div class="c">
+    <h3><span class="d" style="background:var(--rd)"></span> Taxa de Reversão por Distrito</h3>
+    <div class="ch h360"><canvas id="chartRevByDistrict"></canvas></div>
+  </div>
+  <div class="c">
+    <h3><span class="d" style="background:var(--pu)"></span> Evolução Mensal — Reversões</h3>
+    <div class="ch h360"><canvas id="chartRevMonthly"></canvas></div>
+  </div>
+</div>
+
+<div class="sec">Tipo de Reversão</div>
+<div class="g g2">
+  <div class="c">
+    <h3><span class="d" style="background:var(--am)"></span> Quality vs Outro Pack — por Distrito</h3>
+    <div class="ch h320"><canvas id="chartRevType"></canvas></div>
+  </div>
+  <div class="c">
+    <h3><span class="d" style="background:var(--cy)"></span> Detalhamento Completo</h3>
+    <div style="max-height:320px;overflow-y:auto">
+    <table class="rev-table">
+      <thead><tr><th>Distrito</th><th>Mês</th><th>Total Monitorias</th><th>Rev. Quality</th><th>Rev. Outro Pack</th><th>Rev. Total</th><th>Taxa</th><th></th></tr></thead>
+      <tbody id="revDetailTable"></tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div class="sec">Cards por Distrito</div>
+<div id="districtCards" style="padding:0 36px 20px"></div>
+
+<div style="height:50px"></div>
+</div><!-- /tab-reversoes -->
 
 <script>
 Chart.defaults.color='#8892b0';Chart.defaults.borderColor='#2a3048';Chart.defaults.font.family="'Inter',-apple-system,sans-serif";Chart.defaults.font.size=11;
@@ -401,6 +482,179 @@ document.querySelectorAll('.month-btn').forEach(btn=>{
 document.getElementById('fStype').addEventListener('change',e=>{selStype=e.target.value;renderAll()});
 
 renderAll();
+
+// ====== REVERSALS TAB ======
+const REV_DATA=[{"d":"Gamers","m":"2026-01","total":1345,"rev_quality":6,"rev_outro_pack":0,"rev_total":6},{"d":"Gamers","m":"2026-02","total":1384,"rev_quality":1,"rev_outro_pack":0,"rev_total":1},{"d":"Gamers","m":"2026-03","total":1406,"rev_quality":15,"rev_outro_pack":2,"rev_total":17},{"d":"Identity Fraud","m":"2026-01","total":1656,"rev_quality":4,"rev_outro_pack":0,"rev_total":4},{"d":"Identity Fraud","m":"2026-02","total":1797,"rev_quality":0,"rev_outro_pack":0,"rev_total":0},{"d":"Identity Fraud","m":"2026-03","total":2219,"rev_quality":7,"rev_outro_pack":2,"rev_total":9},{"d":"Mule Account","m":"2026-01","total":1479,"rev_quality":55,"rev_outro_pack":17,"rev_total":72},{"d":"Mule Account","m":"2026-02","total":1455,"rev_quality":48,"rev_outro_pack":22,"rev_total":70},{"d":"Mule Account","m":"2026-03","total":1792,"rev_quality":60,"rev_outro_pack":17,"rev_total":77},{"d":"Transactional","m":"2026-01","total":560,"rev_quality":0,"rev_outro_pack":0,"rev_total":0},{"d":"Transactional","m":"2026-02","total":581,"rev_quality":0,"rev_outro_pack":0,"rev_total":0},{"d":"Transactional","m":"2026-03","total":693,"rev_quality":1,"rev_outro_pack":0,"rev_total":1},{"d":"Victims Prevention","m":"2026-01","total":696,"rev_quality":1,"rev_outro_pack":0,"rev_total":1},{"d":"Victims Prevention","m":"2026-02","total":597,"rev_quality":0,"rev_outro_pack":0,"rev_total":0},{"d":"Victims Prevention","m":"2026-03","total":239,"rev_quality":0,"rev_outro_pack":0,"rev_total":0}];
+
+const DISTRICTS=['Gamers','Identity Fraud','Mule Account','Transactional','Victims Prevention'];
+const DCOL={'Gamers':'#8b5cf6','Identity Fraud':'#ec4899','Mule Account':'#06b6d4','Transactional':'#22c55e','Victims Prevention':'#f59e0b'};
+
+let revMonths=new Set(['2026-01','2026-02','2026-03']);
+let selDistrict='all';
+
+function fRev(){
+  let d=REV_DATA.filter(r=>revMonths.has(r.m));
+  if(selDistrict!=='all') d=d.filter(r=>r.d===selDistrict);
+  return d;
+}
+function aggRevByD(data){
+  const map={};
+  data.forEach(r=>{
+    if(!map[r.d]) map[r.d]={d:r.d,total:0,rq:0,rop:0,rt:0};
+    map[r.d].total+=r.total;map[r.d].rq+=r.rev_quality;map[r.d].rop+=r.rev_outro_pack;map[r.d].rt+=r.rev_total;
+  });
+  return Object.values(map);
+}
+
+function renderRevKPIs(){
+  const d=fRev();
+  const total=d.reduce((s,r)=>s+r.total,0);
+  const rt=d.reduce((s,r)=>s+r.rev_total,0);
+  const rq=d.reduce((s,r)=>s+r.rev_quality,0);
+  const rop=d.reduce((s,r)=>s+r.rev_outro_pack,0);
+  const rate=total?Math.round(rt/total*10000)/100:0;
+  const ms=[...revMonths].sort().map(m=>ML[m]).join(', ');
+  document.getElementById('revKpiRow').innerHTML=`
+    <div class="kpi pu"><div class="l">Total Monitorias Global</div><div class="v">${fmt(total)}</div><div class="sub">scorecard_name [Fincrime Global] · ${ms}</div></div>
+    <div class="kpi rd"><div class="l">Total Reversões</div><div class="v">${fmt(rt)}</div><div class="sub">Sim - Revertido (quality + outro pack)</div></div>
+    <div class="kpi am"><div class="l">Taxa de Reversão</div><div class="v">${rate}%</div><div class="sub">reversões / total monitorias</div></div>
+    <div class="kpi pk"><div class="l">Revertido em Quality</div><div class="v">${fmt(rq)}</div><div class="sub">${total?Math.round(rq/total*10000)/100:0}% do total</div></div>
+    <div class="kpi cy"><div class="l">Revertido por Outro Pack</div><div class="v">${fmt(rop)}</div><div class="sub">${total?Math.round(rop/total*10000)/100:0}% do total</div></div>`;
+}
+
+function renderRevByDistrict(){
+  dc('revDist');
+  const agg=aggRevByD(fRev());
+  const sorted=DISTRICTS.filter(d=>agg.some(r=>r.d===d)).map(d=>agg.find(r=>r.d===d));
+  const labels=sorted.map(r=>r.d);
+  const rates=sorted.map(r=>r.total?Math.round(r.rt/r.total*10000)/100:0);
+  const colors=labels.map(l=>DCOL[l]||'#6b7280');
+  CI.revDist=new Chart(document.getElementById('chartRevByDistrict'),{
+    type:'bar',data:{labels,datasets:[{
+      label:'Taxa de Reversão (%)',data:rates,backgroundColor:colors,borderRadius:5,barPercentage:.55
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{
+        afterLabel:ctx=>{const r=sorted[ctx.dataIndex];return`${r.rt} reversões / ${fmt(r.total)} monitorias`}
+      }}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#2a304822'},beginAtZero:true,ticks:{callback:v=>v+'%'}}}}
+  });
+}
+
+function renderRevMonthly(){
+  dc('revMonthly');
+  const ms=[...revMonths].sort();
+  const datasets=DISTRICTS.map(dist=>({
+    label:dist,
+    data:ms.map(m=>{const r=REV_DATA.find(x=>x.d===dist&&x.m===m);return r?r.rev_total:0}),
+    borderColor:DCOL[dist],backgroundColor:'transparent',tension:.3,pointRadius:5,
+    pointBackgroundColor:DCOL[dist],borderWidth:2.5
+  })).filter(ds=>ds.data.some(v=>v>0));
+  CI.revMonthly=new Chart(document.getElementById('chartRevMonthly'),{
+    type:'line',data:{labels:ms.map(m=>ML[m]+'/2026'),datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyleWidth:8}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#2a304822'},beginAtZero:true}}}
+  });
+}
+
+function renderRevType(){
+  dc('revType');
+  const agg=aggRevByD(fRev());
+  const sorted=DISTRICTS.filter(d=>agg.some(r=>r.d===d&&r.rt>0)).map(d=>agg.find(r=>r.d===d));
+  if(!sorted.length){
+    const ctx=document.getElementById('chartRevType').getContext('2d');
+    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+    ctx.fillStyle='#5a6380';ctx.font='12px Inter';ctx.textAlign='center';
+    ctx.fillText('Sem reversões para os filtros selecionados',ctx.canvas.width/2,ctx.canvas.height/2);
+    return;
+  }
+  CI.revType=new Chart(document.getElementById('chartRevType'),{
+    type:'bar',data:{labels:sorted.map(r=>r.d),datasets:[
+      {label:'Revertido em Quality',data:sorted.map(r=>r.rq),backgroundColor:'#ef4444',borderRadius:4,barPercentage:.5},
+      {label:'Revertido por Outro Pack',data:sorted.map(r=>r.rop),backgroundColor:'#f59e0b',borderRadius:4,barPercentage:.5}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyleWidth:8}},
+        tooltip:{callbacks:{afterLabel:ctx=>{const r=sorted[ctx.dataIndex];const t=r.rq+r.rop;return`${t} total reversões`}}}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#2a304822'}}}}
+  });
+}
+
+function renderRevTable(){
+  const data=fRev().sort((a,b)=>b.rev_total-a.rev_total||(b.rev_total/b.total)-(a.rev_total/a.total));
+  const totalAll=data.reduce((s,r)=>s+r.total,0);
+  const revAll=data.reduce((s,r)=>s+r.rev_total,0);
+  const rateAll=totalAll?Math.round(revAll/totalAll*10000)/100:0;
+  let html=data.map(r=>{
+    const rate=r.total?Math.round(r.rev_total/r.total*10000)/100:0;
+    const barW=revAll?Math.max(Math.round(r.rev_total/revAll*100),r.rev_total>0?3:0):0;
+    const cl=rate>3?'var(--rd)':rate>1?'var(--am)':'var(--gn)';
+    return`<tr${r.rev_total>0?' class="rev-highlight"':''}><td style="font-weight:500"><span class="d" style="background:${DCOL[r.d]||'#6b7280'};margin-right:6px"></span>${r.d}</td><td>${ML[r.m]}</td><td>${fmt(r.total)}</td><td>${r.rev_quality||'—'}</td><td>${r.rev_outro_pack||'—'}</td><td style="font-weight:700">${r.rev_total||'—'}</td><td style="font-weight:700;color:${cl}">${rate}%</td><td style="width:80px"><div class="bar-i"><div class="bar-t"><div class="bar-f" style="width:${barW}%;background:${cl}"></div></div></div></td></tr>`;
+  }).join('');
+  html+=`<tr style="background:var(--s2);font-weight:700"><td>TOTAL</td><td>—</td><td>${fmt(totalAll)}</td><td>${data.reduce((s,r)=>s+r.rev_quality,0)}</td><td>${data.reduce((s,r)=>s+r.rev_outro_pack,0)}</td><td>${revAll}</td><td style="color:var(--pu)">${rateAll}%</td><td></td></tr>`;
+  document.getElementById('revDetailTable').innerHTML=html;
+}
+
+function renderDistrictCards(){
+  const el=document.getElementById('districtCards');
+  const districts=selDistrict==='all'?DISTRICTS:[selDistrict];
+  el.innerHTML=districts.map(dist=>{
+    const rows=REV_DATA.filter(r=>r.d===dist&&revMonths.has(r.m));
+    const total=rows.reduce((s,r)=>s+r.total,0);
+    const rt=rows.reduce((s,r)=>s+r.rev_total,0);
+    const rq=rows.reduce((s,r)=>s+r.rev_quality,0);
+    const rop=rows.reduce((s,r)=>s+r.rev_outro_pack,0);
+    const rate=total?Math.round(rt/total*10000)/100:0;
+    const cl=rate>3?'rd':rate>1?'am':'gn';
+    const trend=rows.sort((a,b)=>a.m.localeCompare(b.m)).map(r=>`${ML[r.m]}: ${r.rev_total}`).join(' → ');
+    return`<div class="district-card">
+      <h4><span class="d" style="background:${DCOL[dist]};margin-right:6px"></span>${dist}</h4>
+      <div class="stat">
+        <div class="stat-item"><div class="val" style="color:var(--pu)">${fmt(total)}</div><div class="lbl">Monitorias</div></div>
+        <div class="stat-item"><div class="val" style="color:var(--rd)">${rt}</div><div class="lbl">Reversões</div></div>
+        <div class="stat-item"><div class="val" style="color:var(--${cl})">${rate}%</div><div class="lbl">Taxa</div></div>
+        <div class="stat-item"><div class="val" style="color:var(--pk)">${rq}</div><div class="lbl">Quality</div></div>
+        <div class="stat-item"><div class="val" style="color:var(--am)">${rop}</div><div class="lbl">Outro Pack</div></div>
+      </div>
+      <p style="font-size:11px;color:var(--tx3);margin-top:8px">Evolução: ${trend}</p>
+    </div>`;
+  }).join('');
+}
+
+function renderRevAll(){
+  const dLabel=selDistrict==='all'?'Todos os Distritos':selDistrict;
+  const msLabel=[...revMonths].sort().map(m=>ML[m]).join(', ');
+  document.getElementById('revActiveFilters').textContent=`Exibindo: ${dLabel} · ${msLabel}`;
+  renderRevKPIs();
+  renderRevByDistrict();
+  renderRevMonthly();
+  renderRevType();
+  renderRevTable();
+  renderDistrictCards();
+}
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='reversoes') renderRevAll();
+  });
+});
+
+// Reversals filter events
+document.querySelectorAll('#revMonthBtns .month-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const m=btn.dataset.m;
+    if(revMonths.has(m)&&revMonths.size>1){revMonths.delete(m);btn.classList.remove('active')}
+    else{revMonths.add(m);btn.classList.add('active')}
+    renderRevAll();
+  });
+});
+document.getElementById('fDistrict').addEventListener('change',e=>{selDistrict=e.target.value;renderRevAll()});
 </script>
 </body>
 </html>
