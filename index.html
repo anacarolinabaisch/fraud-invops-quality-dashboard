@@ -12,11 +12,15 @@ body{background:var(--bg);color:var(--tx);font-family:'Inter',-apple-system,Blin
 .hdr{padding:28px 36px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .hdr h1{font-size:22px;font-weight:700;letter-spacing:-.4px}.hdr h1 span{color:var(--pu)}
 .hdr p{color:var(--tx2);font-size:12px}
-.filters{display:flex;gap:12px;padding:16px 36px;align-items:center;flex-wrap:wrap}
+.filters{display:flex;gap:14px;padding:16px 36px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--bd)}
 .filters label{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
-.filters select,.filters input[type=month]{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px 12px;border-radius:8px;font-size:12px;font-family:inherit}
-.filters select:focus,.filters input:focus{outline:none;border-color:var(--pu)}
+.filters select{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px 12px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer}
+.filters select:focus{outline:none;border-color:var(--pu)}
 .fgroup{display:flex;align-items:center;gap:6px}
+.month-btns{display:flex;gap:4px}
+.month-btn{padding:5px 14px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;background:var(--s2);color:var(--tx2);border:1px solid var(--bd);transition:all .15s}
+.month-btn:hover{color:var(--tx);border-color:var(--tx3)}
+.month-btn.active{background:var(--pu2);color:var(--pu);border-color:rgba(139,92,246,.35)}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;padding:16px 36px}
 .kpi{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px 20px}
 .kpi .l{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--tx2);margin-bottom:6px}
@@ -35,21 +39,14 @@ td{padding:8px 10px;border-bottom:1px solid rgba(42,48,72,.5)}
 tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
 .badge{display:inline-block;padding:2px 8px;border-radius:14px;font-size:10px;font-weight:600}
 .badge.ok{background:var(--gn2);color:var(--gn)}.badge.nok{background:var(--rd2);color:var(--rd)}
-.badge.pos{background:var(--gn2);color:var(--gn)}.badge.neg{background:var(--rd2);color:var(--rd)}.badge.neutral{background:var(--pu2);color:var(--pu)}
 .bar-t{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
 .bar-f{height:100%;border-radius:3px}
 .bar-i{display:flex;align-items:center;gap:6px}
-.tabs{display:flex;gap:3px;margin-bottom:14px;flex-wrap:wrap}
-.tab{padding:5px 14px;border-radius:7px;font-size:11px;font-weight:500;cursor:pointer;background:transparent;color:var(--tx2);border:1px solid transparent;transition:all .2s}
-.tab:hover{color:var(--tx);background:var(--s2)}.tab.active{background:var(--pu2);color:var(--pu);border-color:rgba(139,92,246,.25)}
-.tc{display:none}.tc.active{display:block}
 .insight-card{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:14px 18px;margin-bottom:10px}
 .insight-card h4{font-size:12px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .insight-card p{font-size:12px;color:var(--tx2);line-height:1.5}
 .insight-card .num{font-weight:700;color:var(--pu)}
-.stacked-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--tx2)}
-.stacked-legend span{display:flex;align-items:center;gap:4px}
-.stacked-legend .swatch{width:10px;height:10px;border-radius:3px;display:inline-block}
+.filter-tag{display:inline-block;background:var(--pu2);color:var(--pu);padding:3px 10px;border-radius:12px;font-size:10px;font-weight:600;margin-left:8px}
 @media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.hdr,.filters,.kpis,.g,.sec{padding-left:16px;padding-right:16px}}
 </style>
 </head>
@@ -58,32 +55,39 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
 <div class="hdr">
   <div>
     <h1><span>Fraud InvOps Quality</span> — Análise de Erros 2026</h1>
-    <p>Filtro: <code>monitoring_status = concluído</code> &middot; <code>evaluation_created_at ∈ 2026</code> &middot; Contagem por <code>monitoring_id</code> único &middot; Nubank: erro = <code>question_score ≠ 0</code> &middot; hs_finished: erro = <code>feedback_questions = Não</code></p>
+    <p>Filtro base: <code>monitoring_status = concluído</code> · <code>evaluation_created_at ∈ 2026</code> · Contagem por <code>monitoring_id</code> único · Nubank: erro = <code>question_score ≠ 0</code> · hs_finished: erro = <code>feedback_questions = Não</code></p>
   </div>
 </div>
 
-<div class="filters" id="filtersBar">
-  <div class="fgroup"><label>De:</label><input type="month" id="fFrom" value="2026-01" min="2026-01" max="2026-03"></div>
-  <div class="fgroup"><label>Até:</label><input type="month" id="fTo" value="2026-03" min="2026-01" max="2026-03"></div>
-  <div class="fgroup"><label>Affiliation:</label>
-    <select id="fAffil"><option value="all">Todos</option><option value="nubank">Nubank</option><option value="hs_finished">hs_finished</option></select>
+<div class="filters">
+  <div class="fgroup"><label>Meses:</label>
+    <div class="month-btns" id="monthBtns">
+      <button class="month-btn active" data-m="2026-01">Jan</button>
+      <button class="month-btn active" data-m="2026-02">Fev</button>
+      <button class="month-btn active" data-m="2026-03">Mar</button>
+    </div>
   </div>
   <div class="fgroup"><label>Scorecard Type:</label>
-    <select id="fStype"><option value="all">Todos</option><option value="Global">Global</option><option value="Apontamentos Externos">Apontamentos Externos</option><option value="Catch and Release">Catch and Release</option></select>
+    <select id="fStype">
+      <option value="all">Todos</option>
+      <option value="all-no-global">Todos (sem Global)</option>
+      <option value="Global" selected>Global</option>
+      <option value="Apontamentos Externos">Apontamentos Externos</option>
+      <option value="Catch and Release">Catch and Release</option>
+    </select>
   </div>
+  <div id="activeFilters" style="font-size:11px;color:var(--tx3)"></div>
 </div>
 
 <div class="kpis" id="kpiRow"></div>
 
-<!-- Section 1: OK vs NOK by Question -->
-<div class="sec">Scorecard Questions — OK vs NOK por Mês</div>
+<div class="sec">Scorecard Questions — OK vs NOK</div>
 <div class="g gf">
   <div class="c">
-    <h3><span class="d" style="background:var(--pu)"></span> Taxa de NOK por Pergunta (apenas questões com erros)</h3>
+    <h3><span class="d" style="background:var(--pu)"></span> Taxa de NOK por Pergunta (monitorias únicas)</h3>
     <div class="ch h400"><canvas id="chartNokRate"></canvas></div>
   </div>
 </div>
-
 <div class="g g2">
   <div class="c">
     <h3><span class="d" style="background:var(--rd)"></span> Ranking NOK — Monitorias com Erro</h3>
@@ -96,7 +100,6 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
   </div>
 </div>
 
-<!-- Section 2: Nubank vs hs_finished -->
 <div class="sec">Nubank vs hs_finished</div>
 <div class="g g2">
   <div class="c">
@@ -109,24 +112,6 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
   </div>
 </div>
 
-<!-- Section 3: Scorecard Type -->
-<div class="sec">Separação por Scorecard Type</div>
-<div class="g g3">
-  <div class="c">
-    <h3><span class="d" style="background:var(--pu)"></span> Global</h3>
-    <div class="ch h320"><canvas id="chartGlobal"></canvas></div>
-  </div>
-  <div class="c">
-    <h3><span class="d" style="background:var(--pk)"></span> Apontamentos Externos</h3>
-    <div class="ch h320"><canvas id="chartApontamentos"></canvas></div>
-  </div>
-  <div class="c">
-    <h3><span class="d" style="background:var(--cy)"></span> Catch and Release</h3>
-    <div class="ch h320"><canvas id="chartCatch"></canvas></div>
-  </div>
-</div>
-
-<!-- Section 4: Analyst Feedback Insights -->
 <div class="sec">Insights — Analyst Feedback (em monitorias com erro)</div>
 <div class="g g2">
   <div class="c">
@@ -143,293 +128,277 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--s2)}
   </div>
 </div>
 
-<div class="g g2">
-  <div class="c">
-    <h3><span class="d" style="background:var(--gn)"></span> Feedback por Affiliation</h3>
-    <div class="ch h320"><canvas id="chartFbAffil"></canvas></div>
-  </div>
-  <div class="c">
-    <h3><span class="d" style="background:var(--pk)"></span> Feedback por Scorecard Type</h3>
-    <div class="ch h320"><canvas id="chartFbStype"></canvas></div>
-  </div>
-</div>
-
 <div style="height:50px"></div>
 
 <script>
 Chart.defaults.color='#8892b0';Chart.defaults.borderColor='#2a3048';Chart.defaults.font.family="'Inter',-apple-system,sans-serif";Chart.defaults.font.size=11;
 const C=['#8b5cf6','#ec4899','#06b6d4','#22c55e','#f59e0b','#ef4444','#3b82f6','#a78bfa','#f472b6','#67e8f9'];
 const fmt=n=>n.toLocaleString('pt-BR');
-const pct=(a,b)=>b?Math.round(a/(a+b)*100):0;
-
-// =========== DATA ===========
+const pct=(a,b)=>(a+b)?Math.round(a/(a+b)*100):0;
 const MONTHS=['2026-01','2026-02','2026-03'];
+const ML={'2026-01':'Jan','2026-02':'Fev','2026-03':'Mar'};
 
-const nokQuestions=[
+const QMAP=[
   {q:'Ações compl. ALTO IMPACTO',full:'Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?'},
   {q:'Decisão no report correta?',full:'A decisão no report está correta?'},
-  {q:'Decisão HSP correta? (hs_finished)',full:'A decisão da HSP foi correta?'},
+  {q:'Decisão HSP correta? (hs_finished)',full:'A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?'},
   {q:'Decisão suspect_archived?',full:'A decisão de suspect_archived no report está correto?'},
   {q:'Ações compl. BAIXO IMPACTO',full:'Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?'},
   {q:'Ações compl. MÉDIO IMPACTO',full:'Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?'},
   {q:'Decisão report certificado?',full:'A decisão no report certificado está correta?'},
   {q:'Monitoria pode ser realizada?',full:'Monitoria pode ser realizada? Se não, justifique'}
 ];
+const shortQ=q=>{const f=QMAP.find(x=>x.full===q);return f?f.q:q.substring(0,40)};
 
-const qMonthRaw=[{"month":"2026-01","question":"A decisão da HSP foi correta?","result":"NOK","m":14},{"month":"2026-01","question":"A decisão da HSP foi correta?","result":"OK","m":1065},{"month":"2026-02","question":"A decisão da HSP foi correta?","result":"NOK","m":36},{"month":"2026-02","question":"A decisão da HSP foi correta?","result":"OK","m":1599},{"month":"2026-03","question":"A decisão da HSP foi correta?","result":"NOK","m":71},{"month":"2026-03","question":"A decisão da HSP foi correta?","result":"OK","m":1859},{"month":"2026-01","question":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","result":"NOK","m":4455},{"month":"2026-01","question":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","result":"OK","m":1471},{"month":"2026-01","question":"A decisão no report está correta?","result":"NOK","m":6},{"month":"2026-01","question":"A decisão no report está correta?","result":"OK","m":5247},{"month":"2026-01","question":"A decisão de suspect_archived no report está correto?","result":"NOK","m":242},{"month":"2026-01","question":"A decisão de suspect_archived no report está correto?","result":"OK","m":104},{"month":"2026-01","question":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","result":"NOK","m":200},{"month":"2026-01","question":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","result":"OK","m":10},{"month":"2026-01","question":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","result":"NOK","m":167},{"month":"2026-01","question":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","result":"OK","m":44},{"month":"2026-01","question":"A decisão no report certificado está correta?","result":"OK","m":672},{"month":"2026-01","question":"Monitoria pode ser realizada? Se não, justifique","result":"NOK","m":2},{"month":"2026-01","question":"Monitoria pode ser realizada? Se não, justifique","result":"OK","m":2227},{"month":"2026-02","question":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","result":"NOK","m":4135},{"month":"2026-02","question":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","result":"OK","m":1901},{"month":"2026-02","question":"A decisão no report está correta?","result":"NOK","m":1215},{"month":"2026-02","question":"A decisão no report está correta?","result":"OK","m":4230},{"month":"2026-02","question":"A decisão de suspect_archived no report está correto?","result":"NOK","m":240},{"month":"2026-02","question":"A decisão de suspect_archived no report está correto?","result":"OK","m":96},{"month":"2026-02","question":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","result":"NOK","m":213},{"month":"2026-02","question":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","result":"OK","m":9},{"month":"2026-02","question":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","result":"NOK","m":185},{"month":"2026-02","question":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","result":"OK","m":37},{"month":"2026-02","question":"A decisão no report certificado está correta?","result":"NOK","m":178},{"month":"2026-02","question":"A decisão no report certificado está correta?","result":"OK","m":413},{"month":"2026-02","question":"Monitoria pode ser realizada? Se não, justifique","result":"OK","m":2375},{"month":"2026-03","question":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","result":"NOK","m":5372},{"month":"2026-03","question":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","result":"OK","m":1201},{"month":"2026-03","question":"A decisão no report está correta?","result":"NOK","m":4973},{"month":"2026-03","question":"A decisão no report está correta?","result":"OK","m":1362},{"month":"2026-03","question":"A decisão de suspect_archived no report está correto?","result":"NOK","m":356},{"month":"2026-03","question":"A decisão de suspect_archived no report está correto?","result":"OK","m":135},{"month":"2026-03","question":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","result":"NOK","m":208},{"month":"2026-03","question":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","result":"OK","m":16},{"month":"2026-03","question":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","result":"NOK","m":194},{"month":"2026-03","question":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","result":"OK","m":30},{"month":"2026-03","question":"A decisão no report certificado está correta?","result":"NOK","m":234},{"month":"2026-03","question":"A decisão no report certificado está correta?","result":"OK","m":4},{"month":"2026-03","question":"Monitoria pode ser realizada? Se não, justifique","result":"NOK","m":1},{"month":"2026-03","question":"Monitoria pode ser realizada? Se não, justifique","result":"OK","m":2937}];
+// ====== MASTER DATA: affiliation × scorecard_type × month × question ======
+const MASTER=[{"a":"nubank","t":"Global","m":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","nok":4363,"ok":54,"total":4417},{"a":"nubank","t":"Global","m":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","nok":4286,"ok":354,"total":4640},{"a":"nubank","t":"Catch and Release","m":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","nok":2,"ok":347,"total":349},{"a":"nubank","t":"Apontamentos Externos","m":"2026-01","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","nok":22,"ok":6,"total":28},{"a":"nubank","t":"Global","m":"2026-02","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":0,"ok":167,"total":167},{"a":"nubank","t":"Catch and Release","m":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":494,"total":494},{"a":"nubank","t":"Catch and Release","m":"2026-02","q":"A decisão de suspect_archived no report está correto?","nok":240,"ok":96,"total":336},{"a":"nubank","t":"Global","m":"2026-02","q":"A decisão no report certificado está correta?","nok":178,"ok":413,"total":591},{"a":"nubank","t":"Global","m":"2026-01","q":"A decisão no report está correta?","nok":0,"ok":3967,"total":3967},{"a":"nubank","t":"Global","m":"2026-03","q":"A decisão no report certificado está correta?","nok":234,"ok":4,"total":238},{"a":"nubank","t":"Global","m":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":591,"total":591},{"a":"nubank","t":"Catch and Release","m":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":348,"total":348},{"a":"nubank","t":"Global","m":"2026-01","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":0,"ok":594,"total":594},{"a":"nubank","t":"Global","m":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":288,"total":288},{"a":"nubank","t":"Global","m":"2026-02","q":"A decisão no report está correta?","nok":1187,"ok":2400,"total":3587},{"a":"nubank","t":"Catch and Release","m":"2026-01","q":"A decisão de suspect_archived no report está correto?","nok":242,"ok":104,"total":346},{"a":"nubank","t":"Apontamentos Externos","m":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","nok":20,"ok":12,"total":32},{"a":"nubank","t":"Global","m":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":167,"total":167},{"a":"nubank","t":"Apontamentos Externos","m":"2026-01","q":"A decisão no report está correta?","nok":0,"ok":17,"total":17},{"a":"nubank","t":"Global","m":"2026-03","q":"A decisão no report está correta?","nok":4044,"ok":135,"total":4179},{"a":"nubank","t":"Global","m":"2026-01","q":"A decisão no report certificado está correta?","nok":0,"ok":672,"total":672},{"a":"nubank","t":"Apontamentos Externos","m":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":36,"total":36},{"a":"nubank","t":"Global","m":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","nok":3957,"ok":221,"total":4178},{"a":"nubank","t":"Global","m":"2026-03","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":0,"ok":288,"total":288},{"a":"nubank","t":"Catch and Release","m":"2026-03","q":"A decisão de suspect_archived no report está correto?","nok":356,"ok":135,"total":491},{"a":"nubank","t":"Apontamentos Externos","m":"2026-01","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","nok":35,"ok":1,"total":36},{"a":"hs_finished","t":"Global","m":"2026-02","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":36,"ok":0,"total":36},{"a":"hs_finished","t":"Global","m":"2026-01","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":14,"ok":0,"total":14},{"a":"hs_finished","t":"Global","m":"2026-03","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":71,"ok":0,"total":71},{"a":"hs_finished","t":"Global","m":"2026-02","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":0,"ok":1599,"total":1599},{"a":"hs_finished","t":"Global","m":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":1636,"total":1636},{"a":"hs_finished","t":"Global","m":"2026-03","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":0,"ok":1859,"total":1859},{"a":"hs_finished","t":"Global","m":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":1072,"total":1072},{"a":"hs_finished","t":"Global","m":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":1932,"total":1932},{"a":"hs_finished","t":"Global","m":"2026-01","q":"A decisão da HSP foi correta? Se a resposta anterior for não, qual motivo?","nok":0,"ok":1065,"total":1065},{"a":"outro","t":"Apontamentos Externos","m":"2026-01","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","nok":4,"ok":0,"total":4},{"a":"outro","t":"Apontamentos Externos","m":"2026-02","q":"A decisão no report está correta?","nok":0,"ok":10,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","nok":8,"ok":2,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-03","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","nok":10,"ok":0,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":10,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-03","q":"A decisão no report está correta?","nok":2,"ok":8,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","nok":8,"ok":2,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-01","q":"A decisão no report está correta?","nok":1,"ok":3,"total":4},{"a":"outro","t":"Apontamentos Externos","m":"2026-02","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","nok":9,"ok":1,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","nok":4,"ok":0,"total":4},{"a":"outro","t":"Apontamentos Externos","m":"2026-02","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","nok":10,"ok":0,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-03","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","nok":10,"ok":0,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":10,"total":10},{"a":"outro","t":"Apontamentos Externos","m":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","nok":0,"ok":4,"total":4},{"a":"outro","t":"Apontamentos Externos","m":"2026-01","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","nok":3,"ok":0,"total":3}];
 
-const affilRaw=[{"a":"nubank","month":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":4306},{"a":"nubank","month":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":366},{"a":"nubank","month":"2026-01","q":"A decisão no report está correta?","r":"OK","m":3984},{"a":"nubank","month":"2026-01","q":"A decisão de suspect_archived no report está correto?","r":"NOK","m":242},{"a":"nubank","month":"2026-01","q":"A decisão de suspect_archived no report está correto?","r":"OK","m":104},{"a":"nubank","month":"2026-01","q":"A decisão no report certificado está correta?","r":"OK","m":672},{"a":"nubank","month":"2026-01","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"NOK","m":35},{"a":"nubank","month":"2026-01","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"OK","m":1},{"a":"nubank","month":"2026-01","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"NOK","m":22},{"a":"nubank","month":"2026-01","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"OK","m":6},{"a":"nubank","month":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","r":"NOK","m":2},{"a":"nubank","month":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":974},{"a":"nubank","month":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":3957},{"a":"nubank","month":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":221},{"a":"nubank","month":"2026-02","q":"A decisão no report está correta?","r":"NOK","m":1187},{"a":"nubank","month":"2026-02","q":"A decisão no report está correta?","r":"OK","m":2400},{"a":"nubank","month":"2026-02","q":"A decisão de suspect_archived no report está correto?","r":"NOK","m":240},{"a":"nubank","month":"2026-02","q":"A decisão de suspect_archived no report está correto?","r":"OK","m":96},{"a":"nubank","month":"2026-02","q":"A decisão no report certificado está correta?","r":"NOK","m":178},{"a":"nubank","month":"2026-02","q":"A decisão no report certificado está correta?","r":"OK","m":413},{"a":"nubank","month":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":515},{"a":"nubank","month":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":4363},{"a":"nubank","month":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":54},{"a":"nubank","month":"2026-03","q":"A decisão no report está correta?","r":"NOK","m":4044},{"a":"nubank","month":"2026-03","q":"A decisão no report está correta?","r":"OK","m":135},{"a":"nubank","month":"2026-03","q":"A decisão de suspect_archived no report está correto?","r":"NOK","m":356},{"a":"nubank","month":"2026-03","q":"A decisão de suspect_archived no report está correto?","r":"OK","m":135},{"a":"nubank","month":"2026-03","q":"A decisão no report certificado está correta?","r":"NOK","m":234},{"a":"nubank","month":"2026-03","q":"A decisão no report certificado está correta?","r":"OK","m":4},{"a":"nubank","month":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":782},{"a":"hs_finished","month":"2026-01","q":"A decisão da HSP foi correta?","r":"NOK","m":14},{"a":"hs_finished","month":"2026-01","q":"A decisão da HSP foi correta?","r":"OK","m":1065},{"a":"hs_finished","month":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":1072},{"a":"hs_finished","month":"2026-02","q":"A decisão da HSP foi correta?","r":"NOK","m":36},{"a":"hs_finished","month":"2026-02","q":"A decisão da HSP foi correta?","r":"OK","m":1599},{"a":"hs_finished","month":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":1636},{"a":"hs_finished","month":"2026-03","q":"A decisão da HSP foi correta?","r":"NOK","m":71},{"a":"hs_finished","month":"2026-03","q":"A decisão da HSP foi correta?","r":"OK","m":1859},{"a":"hs_finished","month":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":1932}];
+// ====== KPI DATA: scorecard_type × month × affiliation ======
+const KPI_DATA=[{"t":"Global","m":"2026-01","total":4652,"nok":4286,"a":"nubank"},{"t":"Apontamentos Externos","m":"2026-01","total":61,"nok":51,"a":"nubank"},{"t":"Global","m":"2026-02","total":4178,"nok":3963,"a":"nubank"},{"t":"Catch and Release","m":"2026-01","total":350,"nok":242,"a":"nubank"},{"t":"Catch and Release","m":"2026-02","total":348,"nok":240,"a":"nubank"},{"t":"Global","m":"2026-03","total":4417,"nok":4380,"a":"nubank"},{"t":"Catch and Release","m":"2026-03","total":494,"nok":356,"a":"nubank"},{"t":"Global","m":"2026-01","total":1084,"nok":14,"a":"hs_finished"},{"t":"Global","m":"2026-02","total":1636,"nok":36,"a":"hs_finished"},{"t":"Global","m":"2026-03","total":1932,"nok":71,"a":"hs_finished"},{"t":"Apontamentos Externos","m":"2026-01","total":4,"nok":4,"a":"outro"},{"t":"Apontamentos Externos","m":"2026-02","total":11,"nok":10,"a":"outro"},{"t":"Apontamentos Externos","m":"2026-03","total":10,"nok":10,"a":"outro"}];
 
-const stypeRaw=[{"t":"Global","month":"2026-01","q":"A decisão da HSP foi correta?","r":"NOK","m":14},{"t":"Global","month":"2026-01","q":"A decisão da HSP foi correta?","r":"OK","m":1065},{"t":"Global","month":"2026-02","q":"A decisão da HSP foi correta?","r":"NOK","m":36},{"t":"Global","month":"2026-02","q":"A decisão da HSP foi correta?","r":"OK","m":1599},{"t":"Global","month":"2026-03","q":"A decisão da HSP foi correta?","r":"NOK","m":71},{"t":"Global","month":"2026-03","q":"A decisão da HSP foi correta?","r":"OK","m":1859},{"t":"Global","month":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":4286},{"t":"Global","month":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":1429},{"t":"Global","month":"2026-01","q":"A decisão no report está correta?","r":"OK","m":5042},{"t":"Global","month":"2026-01","q":"A decisão no report certificado está correta?","r":"OK","m":672},{"t":"Global","month":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":1665},{"t":"Global","month":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":3958},{"t":"Global","month":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":1856},{"t":"Global","month":"2026-02","q":"A decisão no report está correta?","r":"NOK","m":1189},{"t":"Global","month":"2026-02","q":"A decisão no report está correta?","r":"OK","m":4034},{"t":"Global","month":"2026-02","q":"A decisão no report certificado está correta?","r":"NOK","m":178},{"t":"Global","month":"2026-02","q":"A decisão no report certificado está correta?","r":"OK","m":413},{"t":"Global","month":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":1803},{"t":"Global","month":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":4995},{"t":"Global","month":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":1139},{"t":"Global","month":"2026-03","q":"A decisão no report está correta?","r":"NOK","m":4684},{"t":"Global","month":"2026-03","q":"A decisão no report está correta?","r":"OK","m":1212},{"t":"Global","month":"2026-03","q":"A decisão no report certificado está correta?","r":"NOK","m":234},{"t":"Global","month":"2026-03","q":"A decisão no report certificado está correta?","r":"OK","m":4},{"t":"Global","month":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","r":"NOK","m":1},{"t":"Global","month":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":2219},{"t":"Apontamentos Externos","month":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":169},{"t":"Apontamentos Externos","month":"2026-01","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":42},{"t":"Apontamentos Externos","month":"2026-01","q":"A decisão no report está correta?","r":"NOK","m":6},{"t":"Apontamentos Externos","month":"2026-01","q":"A decisão no report está correta?","r":"OK","m":205},{"t":"Apontamentos Externos","month":"2026-01","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"NOK","m":200},{"t":"Apontamentos Externos","month":"2026-01","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"OK","m":10},{"t":"Apontamentos Externos","month":"2026-01","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"NOK","m":167},{"t":"Apontamentos Externos","month":"2026-01","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"OK","m":44},{"t":"Apontamentos Externos","month":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":215},{"t":"Apontamentos Externos","month":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":177},{"t":"Apontamentos Externos","month":"2026-02","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":45},{"t":"Apontamentos Externos","month":"2026-02","q":"A decisão no report está correta?","r":"NOK","m":26},{"t":"Apontamentos Externos","month":"2026-02","q":"A decisão no report está correta?","r":"OK","m":196},{"t":"Apontamentos Externos","month":"2026-02","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"NOK","m":213},{"t":"Apontamentos Externos","month":"2026-02","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"OK","m":9},{"t":"Apontamentos Externos","month":"2026-02","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"NOK","m":185},{"t":"Apontamentos Externos","month":"2026-02","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"OK","m":37},{"t":"Apontamentos Externos","month":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":224},{"t":"Apontamentos Externos","month":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"NOK","m":163},{"t":"Apontamentos Externos","month":"2026-03","q":"Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?","r":"OK","m":59},{"t":"Apontamentos Externos","month":"2026-03","q":"A decisão no report está correta?","r":"NOK","m":84},{"t":"Apontamentos Externos","month":"2026-03","q":"A decisão no report está correta?","r":"OK","m":138},{"t":"Apontamentos Externos","month":"2026-03","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"NOK","m":207},{"t":"Apontamentos Externos","month":"2026-03","q":"Todas as ações complementares de BAIXO IMPACTO foram feitas corretamente?","r":"OK","m":15},{"t":"Apontamentos Externos","month":"2026-03","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"NOK","m":193},{"t":"Apontamentos Externos","month":"2026-03","q":"Todas as ações complementares de MÉDIO IMPACTO foram feitas corretamente?","r":"OK","m":29},{"t":"Apontamentos Externos","month":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":222},{"t":"Catch and Release","month":"2026-01","q":"A decisão de suspect_archived no report está correto?","r":"NOK","m":242},{"t":"Catch and Release","month":"2026-01","q":"A decisão de suspect_archived no report está correto?","r":"OK","m":104},{"t":"Catch and Release","month":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","r":"NOK","m":2},{"t":"Catch and Release","month":"2026-01","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":347},{"t":"Catch and Release","month":"2026-02","q":"A decisão de suspect_archived no report está correto?","r":"NOK","m":240},{"t":"Catch and Release","month":"2026-02","q":"A decisão de suspect_archived no report está correto?","r":"OK","m":96},{"t":"Catch and Release","month":"2026-02","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":348},{"t":"Catch and Release","month":"2026-03","q":"A decisão de suspect_archived no report está correto?","r":"NOK","m":353},{"t":"Catch and Release","month":"2026-03","q":"A decisão de suspect_archived no report está correto?","r":"OK","m":135},{"t":"Catch and Release","month":"2026-03","q":"Monitoria pode ser realizada? Se não, justifique","r":"OK","m":491}];
+// ====== FEEDBACK DATA: scorecard_type × month × category ======
+const FB_DATA=[{"t":"Apontamentos Externos","m":"2026-01","cat":"Erro de matriz","n":90},{"t":"Apontamentos Externos","m":"2026-01","cat":"Falso Positivo","n":82},{"t":"Apontamentos Externos","m":"2026-01","cat":"Erro de processo","n":25},{"t":"Apontamentos Externos","m":"2026-01","cat":"Falso Negativo","n":7},{"t":"Apontamentos Externos","m":"2026-01","cat":"Outros/Header apenas","n":6},{"t":"Apontamentos Externos","m":"2026-01","cat":"Boa análise (positivo)","n":1},{"t":"Apontamentos Externos","m":"2026-02","cat":"Falso Positivo","n":121},{"t":"Apontamentos Externos","m":"2026-02","cat":"Erro de matriz","n":72},{"t":"Apontamentos Externos","m":"2026-02","cat":"Erro de processo","n":22},{"t":"Apontamentos Externos","m":"2026-02","cat":"Falso Negativo","n":4},{"t":"Apontamentos Externos","m":"2026-02","cat":"Outros/Header apenas","n":3},{"t":"Apontamentos Externos","m":"2026-02","cat":"Erro de bloqueio","n":1},{"t":"Apontamentos Externos","m":"2026-03","cat":"Falso Positivo","n":108},{"t":"Apontamentos Externos","m":"2026-03","cat":"Erro de matriz","n":72},{"t":"Apontamentos Externos","m":"2026-03","cat":"Erro de processo","n":36},{"t":"Apontamentos Externos","m":"2026-03","cat":"Falso Negativo","n":7},{"t":"Apontamentos Externos","m":"2026-03","cat":"Outros/Header apenas","n":1},{"t":"Catch and Release","m":"2026-01","cat":"Outros/Header apenas","n":135},{"t":"Catch and Release","m":"2026-01","cat":"Erro de bloqueio","n":60},{"t":"Catch and Release","m":"2026-01","cat":"Mandou bem (positivo)","n":43},{"t":"Catch and Release","m":"2026-01","cat":"Falso Negativo","n":3},{"t":"Catch and Release","m":"2026-01","cat":"Erro de matriz","n":1},{"t":"Catch and Release","m":"2026-02","cat":"Outros/Header apenas","n":133},{"t":"Catch and Release","m":"2026-02","cat":"Mandou bem (positivo)","n":58},{"t":"Catch and Release","m":"2026-02","cat":"Erro de bloqueio","n":48},{"t":"Catch and Release","m":"2026-02","cat":"Falso Negativo","n":1},{"t":"Catch and Release","m":"2026-03","cat":"Mandou bem (positivo)","n":261},{"t":"Catch and Release","m":"2026-03","cat":"OK (positivo)","n":61},{"t":"Catch and Release","m":"2026-03","cat":"Outros/Header apenas","n":19},{"t":"Catch and Release","m":"2026-03","cat":"Erro de matriz","n":7},{"t":"Catch and Release","m":"2026-03","cat":"Erro de bloqueio","n":4},{"t":"Catch and Release","m":"2026-03","cat":"Falso Negativo","n":4},{"t":"Global","m":"2026-01","cat":"Mandou bem (positivo)","n":1565},{"t":"Global","m":"2026-01","cat":"Boa análise (positivo)","n":575},{"t":"Global","m":"2026-01","cat":"Monitoria OK (positivo)","n":285},{"t":"Global","m":"2026-01","cat":"Outros/Header apenas","n":264},{"t":"Global","m":"2026-01","cat":"Erro de matriz","n":26},{"t":"Global","m":"2026-01","cat":"Erro de bloqueio","n":16},{"t":"Global","m":"2026-01","cat":"Erro de processo","n":13},{"t":"Global","m":"2026-01","cat":"Falso Positivo","n":2},{"t":"Global","m":"2026-02","cat":"Mandou bem (positivo)","n":1787},{"t":"Global","m":"2026-02","cat":"Outros/Header apenas","n":327},{"t":"Global","m":"2026-02","cat":"Monitoria OK (positivo)","n":231},{"t":"Global","m":"2026-02","cat":"Boa análise (positivo)","n":147},{"t":"Global","m":"2026-02","cat":"Falso Positivo","n":11},{"t":"Global","m":"2026-02","cat":"Erro de matriz","n":11},{"t":"Global","m":"2026-02","cat":"Falso Negativo","n":9},{"t":"Global","m":"2026-03","cat":"Mandou bem (positivo)","n":3346},{"t":"Global","m":"2026-03","cat":"Boa análise (positivo)","n":271},{"t":"Global","m":"2026-03","cat":"OK (positivo)","n":182},{"t":"Global","m":"2026-03","cat":"Outros/Header apenas","n":152},{"t":"Global","m":"2026-03","cat":"Falso Positivo","n":80},{"t":"Global","m":"2026-03","cat":"Monitoria OK (positivo)","n":46},{"t":"Global","m":"2026-03","cat":"Erro de matriz","n":45},{"t":"Global","m":"2026-03","cat":"Erro de processo","n":14},{"t":"Global","m":"2026-03","cat":"Falso Negativo","n":5},{"t":"Global","m":"2026-03","cat":"Grace Period","n":4}];
 
-const fbCat2=[{"category":"Mandou bem (positivo)","monitorias":7059},{"category":"Boa análise (positivo)","monitorias":991},{"category":"Monitoria OK (positivo)","monitorias":562},{"category":"OK (positivo)","monitorias":243},{"category":"Falso Positivo","monitorias":405},{"category":"Erro de matriz","monitorias":324},{"category":"Erro de bloqueio","monitorias":129},{"category":"Erro de processo","monitorias":103},{"category":"Falso Negativo","monitorias":40},{"category":"Grace Period","monitorias":4},{"category":"Outros/Header apenas","monitorias":1039}];
+// ====== FILTER STATE ======
+let selMonths=new Set(['2026-01','2026-02','2026-03']);
+let selStype='Global';
 
-const fbCatMonth=[{"month":"2026-01","category":"Mandou bem (positivo)","m":1608},{"month":"2026-01","category":"Boa análise (positivo)","m":573},{"month":"2026-01","category":"Outros/Header apenas","m":405},{"month":"2026-01","category":"Monitoria OK (positivo)","m":285},{"month":"2026-01","category":"Erro de matriz","m":117},{"month":"2026-01","category":"Falso Positivo","m":84},{"month":"2026-01","category":"Erro de bloqueio","m":76},{"month":"2026-01","category":"Erro de processo","m":35},{"month":"2026-01","category":"Falso Negativo","m":10},{"month":"2026-02","category":"Mandou bem (positivo)","m":1845},{"month":"2026-02","category":"Outros/Header apenas","m":463},{"month":"2026-02","category":"Monitoria OK (positivo)","m":231},{"month":"2026-02","category":"Boa análise (positivo)","m":147},{"month":"2026-02","category":"Falso Positivo","m":132},{"month":"2026-02","category":"Erro de matriz","m":83},{"month":"2026-02","category":"Erro de bloqueio","m":49},{"month":"2026-02","category":"Erro de processo","m":21},{"month":"2026-02","category":"Falso Negativo","m":14},{"month":"2026-03","category":"Mandou bem (positivo)","m":3606},{"month":"2026-03","category":"Boa análise (positivo)","m":271},{"month":"2026-03","category":"OK (positivo)","m":243},{"month":"2026-03","category":"Falso Positivo","m":188},{"month":"2026-03","category":"Outros/Header apenas","m":172},{"month":"2026-03","category":"Erro de matriz","m":124},{"month":"2026-03","category":"Erro de processo","m":47},{"month":"2026-03","category":"Monitoria OK (positivo)","m":46},{"month":"2026-03","category":"Falso Negativo","m":16},{"month":"2026-03","category":"Erro de bloqueio","m":4},{"month":"2026-03","category":"Grace Period","m":4}];
-
-const fbAffil=[{"a":"nubank","cat":"Mandou bem","m":6857},{"a":"nubank","cat":"Outros","m":1768},{"a":"nubank","cat":"Boa análise","m":991},{"a":"nubank","cat":"Erro matriz","m":212},{"a":"nubank","cat":"Bloqueio","m":197},{"a":"nubank","cat":"Processo","m":23},{"a":"nubank","cat":"Decisão","m":15},{"a":"nubank","cat":"Reversão","m":1}];
-
-const fbStype=[{"t":"Global","cat":"Mandou bem","m":6499},{"t":"Global","cat":"Outros","m":1432},{"t":"Global","cat":"Boa análise","m":990},{"t":"Global","cat":"Erro matriz","m":166},{"t":"Global","cat":"Bloqueio","m":73},{"t":"Global","cat":"Processo","m":20},{"t":"Global","cat":"Decisão","m":14},{"t":"Apontamentos Externos","cat":"Erro matriz","m":560},{"t":"Apontamentos Externos","cat":"Processo","m":75},{"t":"Apontamentos Externos","cat":"Decisão","m":8},{"t":"Apontamentos Externos","cat":"Outros","m":7},{"t":"Apontamentos Externos","cat":"Reversão","m":3},{"t":"Apontamentos Externos","cat":"Bloqueio","m":1},{"t":"Apontamentos Externos","cat":"Boa análise","m":1},{"t":"Catch and Release","cat":"Mandou bem","m":358},{"t":"Catch and Release","cat":"Outros","m":336},{"t":"Catch and Release","cat":"Bloqueio","m":124},{"t":"Catch and Release","cat":"Erro matriz","m":16}];
-
-// =========== HELPERS ===========
-function getVal(arr,month,question,result){
-  const f=arr.find(x=>x.month===month&&x.question===question&&x.result===result);
-  return f?f.m:0;
+function getSelMonths(){return [...selMonths].sort()}
+function matchType(t){
+  if(selStype==='all') return true;
+  if(selStype==='all-no-global') return t!=='Global';
+  return t===selStype;
 }
-function getValA(arr,affil,month,question,result){
-  const f=arr.find(x=>x.a===affil&&x.month===month&&x.q===question&&x.r===result);
-  return f?f.m:0;
-}
-function getValS(arr,type,month,question,result){
-  const f=arr.find(x=>x.t===type&&x.month===month&&x.q===question&&x.r===result);
-  return f?f.m:0;
-}
-const shortQ=q=>{const f=nokQuestions.find(x=>x.full===q);return f?f.q:q.substring(0,40)};
 
-// =========== KPIs (monitorias únicas por monitoring_id) ===========
-const MONTHLY_KPI=[{month:'2026-01',total:6152,nok:4597,ok:1555},{month:'2026-02',total:6173,nok:4249,ok:1924},{month:'2026-03',total:6853,nok:4817,ok:2036}];
+// Filter MASTER data
+function fM(opts){
+  let d=MASTER.filter(r=>selMonths.has(r.m)&&matchType(r.t));
+  if(opts&&opts.affil) d=d.filter(r=>r.a===opts.affil);
+  return d;
+}
+function fKPI(){return KPI_DATA.filter(r=>selMonths.has(r.m)&&matchType(r.t))}
+function fFB(){return FB_DATA.filter(r=>selMonths.has(r.m)&&matchType(r.t))}
+
+// Aggregate by question
+function aggByQ(data){
+  const map={};
+  data.forEach(r=>{
+    if(!map[r.q]) map[r.q]={q:r.q,nok:0,ok:0};
+    map[r.q].nok+=r.nok;
+    map[r.q].ok+=r.ok;
+  });
+  return Object.values(map);
+}
+
+// Aggregate by month × question
+function aggByMQ(data){
+  const map={};
+  data.forEach(r=>{
+    const k=r.m+'|'+r.q;
+    if(!map[k]) map[k]={m:r.m,q:r.q,nok:0,ok:0};
+    map[k].nok+=r.nok;
+    map[k].ok+=r.ok;
+  });
+  return Object.values(map);
+}
+
+// ====== CHART INSTANCES ======
+let CI={};
+function dc(id){if(CI[id]){CI[id].destroy();delete CI[id]}}
+
+// ====== RENDER: KPIs ======
 function renderKPIs(){
-  const el=document.getElementById('kpiRow');
-  const totalMon=MONTHLY_KPI.reduce((s,m)=>s+m.total,0);
-  const totalNok=MONTHLY_KPI.reduce((s,m)=>s+m.nok,0);
-  const totalOk=MONTHLY_KPI.reduce((s,m)=>s+m.ok,0);
-  const rate=Math.round(totalNok/totalMon*100*10)/10;
-  const negFb=fbCat2.filter(x=>!x.category.includes('positivo')&&x.category!=='Outros/Header apenas').reduce((s,x)=>s+x.monitorias,0);
-  el.innerHTML=`
-    <div class="kpi rd"><div class="l">Monitorias com NOK</div><div class="v">${fmt(totalNok)}</div><div class="sub">monitoring_ids únicos com pelo menos 1 erro</div></div>
-    <div class="kpi gn"><div class="l">Monitorias 100% OK</div><div class="v">${fmt(totalOk)}</div><div class="sub">monitoring_ids sem nenhum erro</div></div>
+  const d=fKPI();
+  const total=d.reduce((s,r)=>s+r.total,0);
+  const nok=d.reduce((s,r)=>s+r.nok,0);
+  const ok=total-nok;
+  const rate=total?Math.round(nok/total*1000)/10:0;
+  const fb=fFB();
+  const negFb=fb.filter(x=>!x.cat.includes('positivo')&&x.cat!=='Outros/Header apenas').reduce((s,x)=>s+x.n,0);
+  const ms=getSelMonths();
+  const mLabel=ms.map(m=>ML[m]).join(', ');
+  document.getElementById('kpiRow').innerHTML=`
+    <div class="kpi rd"><div class="l">Monitorias com NOK</div><div class="v">${fmt(nok)}</div><div class="sub">monitoring_ids com erro (${mLabel})</div></div>
+    <div class="kpi gn"><div class="l">Monitorias 100% OK</div><div class="v">${fmt(ok)}</div><div class="sub">monitoring_ids sem erro</div></div>
     <div class="kpi am"><div class="l">Taxa NOK</div><div class="v">${rate}%</div><div class="sub">das monitorias únicas</div></div>
-    <div class="kpi pu"><div class="l">Total Monitorias 2026</div><div class="v">${fmt(totalMon)}</div><div class="sub">monitoring_ids distintos (Jan–Mar)</div></div>
-    <div class="kpi pk"><div class="l">Feedbacks Negativos</div><div class="v">${fmt(negFb)}</div><div class="sub">monitorias únicas c/ feedback negativo</div></div>
-  `;
+    <div class="kpi pu"><div class="l">Total Monitorias</div><div class="v">${fmt(total)}</div><div class="sub">monitoring_ids distintos</div></div>
+    <div class="kpi pk"><div class="l">Feedbacks Negativos</div><div class="v">${fmt(negFb)}</div><div class="sub">monitorias c/ feedback negativo</div></div>`;
 }
-renderKPIs();
 
-// =========== CHART: NOK Rate by Question ===========
-let chartInstances={};
-function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id]}}
-
+// ====== RENDER: NOK Rate chart ======
 function renderNokRate(){
-  destroyChart('nokRate');
-  const labels=nokQuestions.map(q=>q.q);
-  const nokVals=nokQuestions.map(q=>MONTHS.reduce((s,m)=>s+getVal(qMonthRaw,m,q.full,'NOK'),0));
-  const okVals=nokQuestions.map(q=>MONTHS.reduce((s,m)=>s+getVal(qMonthRaw,m,q.full,'OK'),0));
-  chartInstances.nokRate=new Chart(document.getElementById('chartNokRate'),{
-    type:'bar',
-    data:{labels,datasets:[
-      {label:'NOK',data:nokVals,backgroundColor:'#ef4444',borderRadius:4,barPercentage:.6},
-      {label:'OK',data:okVals,backgroundColor:'#22c55e',borderRadius:4,barPercentage:.6}
+  dc('nokRate');
+  const agg=aggByQ(fM());
+  const qs=QMAP.filter(q=>agg.some(r=>r.q===q.full&&(r.nok+r.ok)>0));
+  const labels=qs.map(q=>q.q);
+  const nokV=qs.map(q=>{const r=agg.find(x=>x.q===q.full);return r?r.nok:0});
+  const okV=qs.map(q=>{const r=agg.find(x=>x.q===q.full);return r?r.ok:0});
+  CI.nokRate=new Chart(document.getElementById('chartNokRate'),{
+    type:'bar',data:{labels,datasets:[
+      {label:'NOK',data:nokV,backgroundColor:'#ef4444',borderRadius:4,barPercentage:.6},
+      {label:'OK',data:okV,backgroundColor:'#22c55e',borderRadius:4,barPercentage:.6}
     ]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
       plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,pointStyleWidth:10}},
-        tooltip:{callbacks:{afterLabel:ctx=>{const i=ctx.dataIndex;const r=pct(nokVals[i],okVals[i]);return `Taxa NOK: ${r}%`}}}},
-      scales:{x:{stacked:true,grid:{color:'#2a304822'}},y:{stacked:true,grid:{display:false}}}
-    }
+        tooltip:{callbacks:{afterLabel:ctx=>{const i=ctx.dataIndex;return`Taxa NOK: ${pct(nokV[i],okV[i])}%`}}}},
+      scales:{x:{stacked:true,grid:{color:'#2a304822'}},y:{stacked:true,grid:{display:false}}}}
   });
 }
-renderNokRate();
 
-// =========== TABLE: NOK ranking ===========
+// ====== RENDER: NOK table ======
 function renderNokTable(){
-  const tbody=document.getElementById('nokTable');
-  const rows=nokQuestions.map(q=>{
-    const nok=MONTHS.reduce((s,m)=>s+getVal(qMonthRaw,m,q.full,'NOK'),0);
-    const ok=MONTHS.reduce((s,m)=>s+getVal(qMonthRaw,m,q.full,'OK'),0);
-    return{q:q.q,nok,ok,rate:pct(nok,ok)};
-  }).filter(r=>r.nok>0).sort((a,b)=>b.nok-a.nok);
-  const mx=rows.length?rows[0].rate:1;
-  tbody.innerHTML=rows.map(r=>{
+  const agg=aggByQ(fM());
+  const rows=QMAP.map(q=>{
+    const r=agg.find(x=>x.q===q.full);
+    return r?{q:q.q,nok:r.nok,ok:r.ok,rate:pct(r.nok,r.ok)}:null;
+  }).filter(r=>r&&r.nok>0).sort((a,b)=>b.nok-a.nok);
+  document.getElementById('nokTable').innerHTML=rows.map(r=>{
     const cl=r.rate>80?'var(--rd)':r.rate>50?'var(--am)':'var(--gn)';
-    return `<tr><td style="font-weight:500">${r.q}</td><td><span class="badge nok">${fmt(r.nok)}</span></td><td><span class="badge ok">${fmt(r.ok)}</span></td><td style="font-weight:700;color:${cl}">${r.rate}%</td><td style="width:100px"><div class="bar-i"><div class="bar-t"><div class="bar-f" style="width:${r.rate}%;background:${cl}"></div></div></div></td></tr>`;
+    return`<tr><td style="font-weight:500">${r.q}</td><td><span class="badge nok">${fmt(r.nok)}</span></td><td><span class="badge ok">${fmt(r.ok)}</span></td><td style="font-weight:700;color:${cl}">${r.rate}%</td><td style="width:100px"><div class="bar-i"><div class="bar-t"><div class="bar-f" style="width:${r.rate}%;background:${cl}"></div></div></div></td></tr>`;
   }).join('');
 }
-renderNokTable();
 
-// =========== CHART: NOK Monthly ===========
+// ====== RENDER: NOK Monthly ======
 function renderNokMonthly(){
-  destroyChart('nokMonthly');
-  const qWithNok=nokQuestions.filter(q=>MONTHS.some(m=>getVal(qMonthRaw,m,q.full,'NOK')>0));
-  const datasets=qWithNok.map((q,i)=>({
-    label:q.q,data:MONTHS.map(m=>getVal(qMonthRaw,m,q.full,'NOK')),
+  dc('nokMonthly');
+  const ms=getSelMonths();
+  const mq=aggByMQ(fM());
+  const qs=QMAP.filter(q=>mq.some(r=>r.q===q.full&&r.nok>0));
+  const datasets=qs.map((q,i)=>({
+    label:q.q,data:ms.map(m=>{const r=mq.find(x=>x.m===m&&x.q===q.full);return r?r.nok:0}),
     borderColor:C[i%C.length],backgroundColor:'transparent',tension:.3,pointRadius:4,
     pointBackgroundColor:C[i%C.length],borderWidth:2
   }));
-  chartInstances.nokMonthly=new Chart(document.getElementById('chartNokMonthly'),{
-    type:'line',data:{labels:MONTHS.map(m=>{const[y,mo]=m.split('-');return['Jan','Fev','Mar'][parseInt(mo)-1]+'/'+y}),datasets},
+  CI.nokMonthly=new Chart(document.getElementById('chartNokMonthly'),{
+    type:'line',data:{labels:ms.map(m=>ML[m]+'/2026'),datasets},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyleWidth:8,font:{size:10}}}},
-      scales:{x:{grid:{display:false}},y:{grid:{color:'#2a304822'},beginAtZero:true}}
-    }
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#2a304822'},beginAtZero:true}}}
   });
 }
-renderNokMonthly();
 
-// =========== CHARTS: Nubank vs hs_finished ===========
+// ====== RENDER: Affiliation charts ======
 function renderAffilChart(canvasId,affil,color){
-  destroyChart(canvasId);
-  const qsMap={
-    'nubank':['Todas as ações complementares de ALTO IMPACTO foram feitas corretamente?','A decisão no report está correta?','A decisão de suspect_archived no report está correto?','A decisão no report certificado está correta?','Monitoria pode ser realizada? Se não, justifique'],
-    'hs_finished':['A decisão da HSP foi correta?','Monitoria pode ser realizada? Se não, justifique']
-  };
-  const qs=qsMap[affil]||qsMap['nubank'];
-  const qsShort=qs.map(shortQ);
-  const nokDs={label:'NOK',data:[],backgroundColor:'#ef4444',borderRadius:4,barPercentage:.5};
-  const okDs={label:'OK',data:[],backgroundColor:color,borderRadius:4,barPercentage:.5};
-  const labels=[];
-  MONTHS.forEach(m=>{
-    const ml=['Jan','Fev','Mar'][parseInt(m.split('-')[1])-1];
-    qs.forEach((q,i)=>{
-      const nok=getValA(affilRaw,affil,m,q,'NOK');
-      const ok=getValA(affilRaw,affil,m,q,'OK');
-      if(nok+ok>0){labels.push(ml+' | '+qsShort[i]);nokDs.data.push(nok);okDs.data.push(ok)}
-    });
-  });
-  chartInstances[canvasId]=new Chart(document.getElementById(canvasId),{
-    type:'bar',data:{labels,datasets:[nokDs,okDs]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyleWidth:8}},
-        tooltip:{callbacks:{afterLabel:ctx=>{const n=nokDs.data[ctx.dataIndex],o=okDs.data[ctx.dataIndex];return `Taxa NOK: ${pct(n,o)}%`}}}},
-      scales:{x:{stacked:true,grid:{color:'#2a304822'}},y:{stacked:true,grid:{display:false},ticks:{font:{size:10}}}}
-    }
-  });
-}
-renderAffilChart('chartNubank','nubank','#22c55e');
-renderAffilChart('chartHs','hs_finished','#f59e0b');
-
-// =========== CHARTS: Scorecard Types ===========
-function renderStypeChart(canvasId,type,color){
-  destroyChart(canvasId);
-  const qs=[...new Set(stypeRaw.filter(x=>x.t===type).map(x=>x.q))];
+  dc(canvasId);
+  const ms=getSelMonths();
+  const d=fM({affil});
+  const qs=[...new Set(d.filter(r=>r.nok+r.ok>0).map(r=>r.q))];
   const labels=[];const nokD=[];const okD=[];
-  MONTHS.forEach(m=>{
-    const ml=['Jan','Fev','Mar'][parseInt(m.split('-')[1])-1];
+  ms.forEach(m=>{
     qs.forEach(q=>{
-      const nok=getValS(stypeRaw,type,m,q,'NOK');
-      const ok=getValS(stypeRaw,type,m,q,'OK');
-      if(nok+ok>0){labels.push(ml+' | '+shortQ(q));nokD.push(nok);okD.push(ok)}
+      const rows=d.filter(r=>r.m===m&&r.q===q);
+      const nok=rows.reduce((s,r)=>s+r.nok,0);
+      const ok=rows.reduce((s,r)=>s+r.ok,0);
+      if(nok+ok>0){labels.push(ML[m]+' | '+shortQ(q));nokD.push(nok);okD.push(ok)}
     });
   });
-  chartInstances[canvasId]=new Chart(document.getElementById(canvasId),{
+  if(!labels.length){
+    const ctx=document.getElementById(canvasId).getContext('2d');
+    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+    ctx.fillStyle='#5a6380';ctx.font='12px Inter';ctx.textAlign='center';
+    ctx.fillText('Sem dados para os filtros selecionados',ctx.canvas.width/2,ctx.canvas.height/2);
+    return;
+  }
+  CI[canvasId]=new Chart(document.getElementById(canvasId),{
     type:'bar',data:{labels,datasets:[
       {label:'NOK',data:nokD,backgroundColor:'#ef4444',borderRadius:4,barPercentage:.5},
       {label:'OK',data:okD,backgroundColor:color,borderRadius:4,barPercentage:.5}
     ]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
       plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyleWidth:8}},
-        tooltip:{callbacks:{afterLabel:ctx=>{return `Taxa NOK: ${pct(nokD[ctx.dataIndex],okD[ctx.dataIndex])}%`}}}},
-      scales:{x:{stacked:true,grid:{color:'#2a304822'}},y:{stacked:true,grid:{display:false},ticks:{font:{size:9}}}}
-    }
+        tooltip:{callbacks:{afterLabel:ctx=>`Taxa NOK: ${pct(nokD[ctx.dataIndex],okD[ctx.dataIndex])}%`}}},
+      scales:{x:{stacked:true,grid:{color:'#2a304822'}},y:{stacked:true,grid:{display:false},ticks:{font:{size:10}}}}}
   });
 }
-renderStypeChart('chartGlobal','Global','#8b5cf6');
-renderStypeChart('chartApontamentos','Apontamentos Externos','#ec4899');
-renderStypeChart('chartCatch','Catch and Release','#06b6d4');
 
-// =========== CHART: Feedback Categories ===========
-(function(){
-  const positive=fbCat2.filter(x=>x.category.includes('positivo'));
-  const negative=fbCat2.filter(x=>!x.category.includes('positivo')&&x.category!=='Outros/Header apenas');
-  const other=fbCat2.filter(x=>x.category==='Outros/Header apenas');
+// ====== RENDER: Feedback Categories ======
+function renderFbCat(){
+  dc('fbCat');
+  const fb=fFB();
+  const map={};
+  fb.forEach(r=>{map[r.cat]=(map[r.cat]||0)+r.n});
+  const positive=Object.entries(map).filter(([k])=>k.includes('positivo')).sort((a,b)=>b[1]-a[1]);
+  const negative=Object.entries(map).filter(([k])=>!k.includes('positivo')&&k!=='Outros/Header apenas').sort((a,b)=>b[1]-a[1]);
+  const other=Object.entries(map).filter(([k])=>k==='Outros/Header apenas');
   const all=[...negative,...other,...positive];
-  const colors=all.map(x=>x.category.includes('positivo')?'#22c55e':x.category==='Outros/Header apenas'?'#6b7280':'#ef4444');
-  new Chart(document.getElementById('chartFbCat'),{
-    type:'bar',data:{labels:all.map(x=>x.category.replace(' (positivo)','')),datasets:[{
-      data:all.map(x=>x.monitorias),backgroundColor:colors,borderRadius:5,barPercentage:.55
+  if(!all.length) return;
+  const colors=all.map(([k])=>k.includes('positivo')?'#22c55e':k==='Outros/Header apenas'?'#6b7280':'#ef4444');
+  CI.fbCat=new Chart(document.getElementById('chartFbCat'),{
+    type:'bar',data:{labels:all.map(([k])=>k.replace(' (positivo)','')),datasets:[{
+      data:all.map(([,v])=>v),backgroundColor:colors,borderRadius:5,barPercentage:.55
     }]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
       plugins:{legend:{display:false}},
-      scales:{x:{grid:{color:'#2a304822'}},y:{grid:{display:false},ticks:{font:{size:10}}}}
-    }
+      scales:{x:{grid:{color:'#2a304822'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}
   });
-})();
+}
 
-// =========== CHART: Negative Feedback Monthly ===========
-(function(){
+// ====== RENDER: Negative Feedback Monthly ======
+function renderFbNeg(){
+  dc('fbNeg');
+  const ms=getSelMonths();
+  const fb=fFB();
   const negCats=['Falso Positivo','Erro de matriz','Erro de bloqueio','Erro de processo','Falso Negativo','Grace Period'];
   const negColors={'Falso Positivo':'#ef4444','Erro de matriz':'#ec4899','Erro de bloqueio':'#f59e0b','Erro de processo':'#06b6d4','Falso Negativo':'#a78bfa','Grace Period':'#67e8f9'};
   const datasets=negCats.map(cat=>({
     label:cat,
-    data:MONTHS.map(m=>{const f=fbCatMonth.find(x=>x.month===m&&x.category===cat);return f?f.m:0}),
+    data:ms.map(m=>fb.filter(r=>r.m===m&&r.cat===cat).reduce((s,r)=>s+r.n,0)),
     backgroundColor:negColors[cat]||'#6b7280',borderRadius:3,barPercentage:.7
   })).filter(ds=>ds.data.some(v=>v>0));
-  new Chart(document.getElementById('chartFbNegMonthly'),{
-    type:'bar',data:{labels:['Jan/2026','Fev/2026','Mar/2026'],datasets},
+  CI.fbNeg=new Chart(document.getElementById('chartFbNegMonthly'),{
+    type:'bar',data:{labels:ms.map(m=>ML[m]+'/2026'),datasets},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{padding:8,usePointStyle:true,pointStyleWidth:8,font:{size:9}}}},
-      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#2a304822'}}}
-    }
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#2a304822'}}}}
   });
-})();
+}
 
-// =========== INSIGHTS ===========
-(function(){
+// ====== RENDER: Insights ======
+function renderInsights(){
+  const fb=fFB();
+  const map={};
+  fb.forEach(r=>{map[r.cat]=(map[r.cat]||0)+r.n});
+  const negItems=Object.entries(map).filter(([k])=>!k.includes('positivo')&&k!=='Outros/Header apenas').sort((a,b)=>b[1]-a[1]);
   const el=document.getElementById('insightsContainer');
-  const insights=[
-    {title:'Falso Positivo é o erro mais reportado',icon:'rd',text:`Com <span class="num">405 monitorias</span> únicas, "Falso Positivo" é o principal feedback negativo — com tendência de alta: 84 em Jan → 132 em Fev → 188 em Mar (+124% no trimestre).`},
-    {title:'Erro de Matriz tem presença estável',icon:'pk',text:`<span class="num">324 monitorias</span> únicas com feedback de erro de matriz. Consistente nos 3 meses (117 → 83 → 124), indicando oportunidade estrutural de treinamento sobre uso de matrizes de decisão.`},
-    {title:'Erro de Bloqueio caiu significativamente',icon:'am',text:`De <span class="num">76 monitorias</span> em Jan para apenas <span class="num">4 em Mar</span> (-95%). Possível melhoria no processo de bloqueio ou atualização de ferramenta.`},
-    {title:'Feedbacks positivos em monitorias com erro',icon:'gn',text:`<span class="num">8.855 monitorias</span> únicas (81% das com feedback) receberam mensagem positiva mesmo tendo question_score ≠ 0. Muitos erros de ações complementares são leves e o analista acertou a decisão principal.`},
-    {title:'hs_finished: taxa NOK baixa e estável',icon:'pu',text:`Das <span class="num">4.652 monitorias</span> de hs_finished (avaliadas por feedback_questions = Sim/Não), apenas <span class="num">121 (2,6%)</span> tiveram "Não" (decisão HSP incorreta). Evolução: 14 em Jan → 36 em Fev → 71 em Mar — crescimento proporcional ao volume.`},
-    {title:'Nubank: 93% de taxa NOK',icon:'rd',text:`Das <span class="num">14.500 monitorias</span> Nubank (avaliadas por question_score ≠ 0), <span class="num">13.518 (93%)</span> tiveram pelo menos 1 erro. A maioria dos erros está em "Ações ALTO IMPACTO".`}
-  ];
+  if(!negItems.length){el.innerHTML='<p style="color:var(--tx3)">Sem feedbacks negativos para os filtros selecionados.</p>';return}
+  const insights=negItems.slice(0,4).map(([cat,n])=>{
+    const byMonth=getSelMonths().map(m=>fb.filter(r=>r.m===m&&r.cat===cat).reduce((s,r)=>s+r.n,0));
+    const trend=byMonth.map((v,i)=>ML[getSelMonths()[i]]+': '+v).join(' → ');
+    return{title:cat,icon:cat.includes('Falso')?'rd':'pk',text:`<span class="num">${fmt(n)} monitorias</span> únicas. Evolução: ${trend}.`};
+  });
   el.innerHTML=insights.map(ins=>`
     <div class="insight-card"><h4><span class="d" style="background:var(--${ins.icon})"></span>${ins.title}</h4><p>${ins.text}</p></div>
   `).join('');
-})();
+}
 
-// =========== CHART: Feedback by Affiliation ===========
-(function(){
-  const cats=[...new Set(fbAffil.map(x=>x.cat))];
-  const affilColors={'Mandou bem':'#22c55e','Boa análise':'#10b981','Erro matriz':'#ec4899','Bloqueio':'#f59e0b','Processo':'#06b6d4','Decisão':'#ef4444','Reversão':'#a78bfa','Outros':'#6b7280'};
-  const datasets=cats.map(cat=>({
-    label:cat,data:['nubank'].map(a=>{const f=fbAffil.find(x=>x.a===a&&x.cat===cat);return f?f.m:0}),
-    backgroundColor:affilColors[cat]||'#6b7280',borderRadius:3,barPercentage:.5
-  }));
-  new Chart(document.getElementById('chartFbAffil'),{
-    type:'bar',data:{labels:['Nubank'],datasets},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyleWidth:8,font:{size:10}}}},
-      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#2a304822'}}}
-    }
-  });
-})();
+// ====== RENDER ALL ======
+function renderAll(){
+  const stypeLabel=document.getElementById('fStype').selectedOptions[0].text;
+  const msLabel=getSelMonths().map(m=>ML[m]).join(', ');
+  document.getElementById('activeFilters').textContent=`Exibindo: ${stypeLabel} · ${msLabel}`;
+  renderKPIs();
+  renderNokRate();
+  renderNokTable();
+  renderNokMonthly();
+  renderAffilChart('chartNubank','nubank','#22c55e');
+  renderAffilChart('chartHs','hs_finished','#f59e0b');
+  renderFbCat();
+  renderFbNeg();
+  renderInsights();
+}
 
-// =========== CHART: Feedback by Scorecard Type ===========
-(function(){
-  const types=[...new Set(fbStype.map(x=>x.t))];
-  const cats=[...new Set(fbStype.map(x=>x.cat))];
-  const catColors={'Mandou bem':'#22c55e','Boa análise':'#10b981','Erro matriz':'#ec4899','Bloqueio':'#f59e0b','Processo':'#06b6d4','Decisão':'#ef4444','Reversão':'#a78bfa','Outros':'#6b7280'};
-  const datasets=cats.map(cat=>({
-    label:cat,data:types.map(t=>{const f=fbStype.find(x=>x.t===t&&x.cat===cat);return f?f.m:0}),
-    backgroundColor:catColors[cat]||'#6b7280',borderRadius:3,barPercentage:.6
-  }));
-  new Chart(document.getElementById('chartFbStype'),{
-    type:'bar',data:{labels:types,datasets},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyleWidth:8,font:{size:10}}}},
-      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#2a304822'}}}
-    }
+// ====== FILTER EVENTS ======
+document.querySelectorAll('.month-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const m=btn.dataset.m;
+    if(selMonths.has(m)&&selMonths.size>1){selMonths.delete(m);btn.classList.remove('active')}
+    else{selMonths.add(m);btn.classList.add('active')}
+    renderAll();
   });
-})();
+});
+document.getElementById('fStype').addEventListener('change',e=>{selStype=e.target.value;renderAll()});
+
+renderAll();
 </script>
 </body>
 </html>
