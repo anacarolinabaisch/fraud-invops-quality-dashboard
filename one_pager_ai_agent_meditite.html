@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ONE PAGER — AI Agent Meditite · Quality Fraud</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --s1: #161b22;
+  --s2: #1e2430;
+  --s3: #252d3b;
+  --border: #2d333b;
+  --border2: #3d4451;
+  --purple: #8b5cf6;
+  --purple2: #a78bfa;
+  --green: #22c55e;
+  --green2: #4ade80;
+  --red: #ef4444;
+  --red2: #f87171;
+  --yellow: #f59e0b;
+  --yellow2: #fbbf24;
+  --blue: #38bdf8;
+  --cyan: #06b6d4;
+  --orange: #f97316;
+  --text: #cdd9e5;
+  --muted: #768390;
+  --dim: #4a5568;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 13px; line-height: 1.6; }
+
+/* PRINT */
+@media print {
+  body { background: #fff; color: #111; font-size: 11px; }
+  .no-print { display: none; }
+  .page { max-width: 100%; padding: 0.5rem; }
+  .card { break-inside: avoid; }
+}
+
+/* HEADER */
+.top-bar {
+  background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(6,182,212,0.08) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 2.5rem 1.5rem;
+}
+.top-bar-inner { max-width: 1300px; margin: 0 auto; }
+.project-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--purple2); background: rgba(139,92,246,0.12);
+  border: 1px solid rgba(139,92,246,0.3); border-radius: 999px;
+  padding: 3px 12px; margin-bottom: 0.75rem;
+}
+h1 {
+  font-size: 2rem; font-weight: 900; color: #fff;
+  letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.4rem;
+}
+.subtitle { color: var(--muted); font-size: 0.84rem; margin-bottom: 1.2rem; }
+.meta-row {
+  display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;
+}
+.meta-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; font-weight: 600; padding: 4px 11px; border-radius: 6px;
+  border: 1px solid;
+}
+.mp-purple { color: var(--purple2); border-color: rgba(139,92,246,0.35); background: rgba(139,92,246,0.08); }
+.mp-green  { color: var(--green2);  border-color: rgba(34,197,94,0.35);  background: rgba(34,197,94,0.08); }
+.mp-blue   { color: var(--blue);    border-color: rgba(56,189,248,0.35); background: rgba(56,189,248,0.08); }
+.mp-yellow { color: var(--yellow2); border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.08); }
+.mp-red    { color: var(--red2);    border-color: rgba(239,68,68,0.35);  background: rgba(239,68,68,0.08); }
+.mp-orange { color: var(--orange);  border-color: rgba(249,115,22,0.35); background: rgba(249,115,22,0.08); }
+
+/* PAGE */
+.page { max-width: 1300px; margin: 0 auto; padding: 2rem 2.5rem; }
+
+/* SECTION */
+section { margin-bottom: 2.5rem; scroll-margin-top: 80px; }
+.sec-head {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.62rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 1.1rem;
+}
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.sec-icon { font-size: 0.85rem; }
+
+/* KPI GRID */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 0.75rem; margin-bottom: 1.2rem; }
+.kpi {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 11px;
+  padding: 1rem 1.1rem; transition: border-color .2s;
+}
+.kpi:hover { border-color: var(--border2); }
+.kpi-label { font-size: 0.6rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.35rem; }
+.kpi-val { font-size: 1.8rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; }
+.kpi-sub { font-size: 0.62rem; color: var(--dim); margin-top: 0.3rem; }
+.kpi-note { font-size: 0.58rem; color: var(--dim); margin-top: 0.15rem; font-style: italic; }
+.kv-p { color: var(--purple2); }
+.kv-g { color: var(--green); }
+.kv-r { color: var(--red); }
+.kv-y { color: var(--yellow); }
+.kv-b { color: var(--blue); }
+.kv-c { color: var(--cyan); }
+.kv-w { color: #fff; }
+.kv-o { color: var(--orange); }
+
+/* CARDS */
+.card {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 12px; padding: 1.3rem;
+}
+.card-title { font-size: 0.65rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+
+/* GRID LAYOUTS */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+@media (max-width: 900px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ITEM LIST */
+.item-list { list-style: none; }
+.item-list li {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.55rem 0; border-bottom: 1px solid rgba(45,51,59,0.4);
+  font-size: 0.78rem; line-height: 1.5;
+}
+.item-list li:last-child { border-bottom: none; }
+.item-dot {
+  flex-shrink: 0; width: 7px; height: 7px; border-radius: 50%;
+  margin-top: 0.45rem;
+}
+
+/* BAR ROWS */
+.bar-row { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.5rem; font-size: 0.75rem; }
+.bar-lbl { flex-shrink: 0; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.bar-track { flex: 1; height: 6px; background: var(--s2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; }
+.bar-pct { flex-shrink: 0; width: 42px; text-align: right; font-size: 0.67rem; font-weight: 700; }
+.bar-n { flex-shrink: 0; width: 40px; text-align: right; font-size: 0.65rem; color: var(--muted); }
+
+/* TIMELINE */
+.tl { position: relative; padding-left: 1.4rem; }
+.tl::before { content: ''; position: absolute; left: 4px; top: 8px; bottom: 8px; width: 1px; background: var(--border); }
+.tl-item { position: relative; margin-bottom: 1.1rem; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--bg); position: absolute; left: -1.3rem; top: 4px; }
+.tl-date { font-size: 0.63rem; color: var(--muted); margin-bottom: 1px; }
+.tl-title { font-size: 0.8rem; font-weight: 600; color: #fff; }
+.tl-sub { font-size: 0.7rem; color: var(--dim); margin-top: 2px; }
+
+/* INSIGHT CARDS */
+.insight-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 0.85rem; }
+.insight {
+  background: var(--s2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 1.1rem; transition: border-color .2s;
+}
+.insight:hover { border-color: var(--border2); }
+.insight-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+.insight-title { font-size: 0.76rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+.insight-body { font-size: 0.7rem; color: var(--muted); line-height: 1.55; }
+
+/* SUGGESTION CARDS */
+.sug-card {
+  background: var(--s2); border-radius: 10px; padding: 1rem 1.1rem;
+  border-left: 3px solid var(--purple);
+}
+.sug-card.green-l { border-left-color: var(--green); }
+.sug-card.red-l { border-left-color: var(--red); }
+.sug-card.yellow-l { border-left-color: var(--yellow); }
+.sug-card.orange-l { border-left-color: var(--orange); }
+.sug-label { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; }
+.sug-title { font-size: 0.78rem; font-weight: 700; color: #fff; margin-bottom: 0.35rem; }
+.sug-body { font-size: 0.7rem; color: var(--muted); line-height: 1.55; }
+
+/* HIGHLIGHT BOX */
+.highlight-box {
+  background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25);
+  border-radius: 10px; padding: 1.1rem 1.3rem; margin-bottom: 1rem;
+  font-size: 0.78rem; line-height: 1.65; color: var(--text);
+}
+.highlight-box strong { color: var(--purple2); }
+
+/* TABLE */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
+.data-table th {
+  color: var(--muted); font-weight: 600; text-align: left;
+  padding: 0.45rem 0.7rem; border-bottom: 1px solid var(--border);
+  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.data-table td { padding: 0.5rem 0.7rem; border-bottom: 1px solid rgba(45,51,59,0.4); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(255,255,255,0.018); }
+.badge {
+  display: inline-block; font-size: 0.61rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px;
+}
+.badge-g { background: rgba(34,197,94,0.12); color: var(--green); }
+.badge-y { background: rgba(245,158,11,0.12); color: var(--yellow); }
+.badge-r { background: rgba(239,68,68,0.12); color: var(--red); }
+.badge-p { background: rgba(139,92,246,0.12); color: var(--purple2); }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border); margin-top: 3rem;
+  padding: 1.2rem 2.5rem; color: var(--dim); font-size: 0.65rem;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="project-tag">⚡ ONE PAGER · Inv.Ops Brasil · Quality Fraud</div>
+    <h1>AI Agent — Meditite</h1>
+    <p class="subtitle">Resultados, gaps, o que funcionou, o que não funcionou e próximos passos · Fev – Abr 2026 · 1.759 casos monitorados</p>
+    <div class="meta-row">
+      <span class="meta-pill mp-purple">📅 Fev – Abr 2026</span>
+      <span class="meta-pill mp-green">✅ 94% Assertividade Global</span>
+      <span class="meta-pill mp-yellow">⚠️ 25% Erro de Processo</span>
+      <span class="meta-pill mp-red">📧 6% Side Effect NOK</span>
+      <span class="meta-pill mp-orange">🤖 Viés Positivo · Principal Erro</span>
+      <span class="meta-pill mp-blue">⏳ Tempo de Conta · Gap #1 da IA</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ============ MÉTRICAS ============ -->
+<section id="metricas">
+  <div class="sec-head"><span class="sec-icon">📊</span>Métricas Globais · Fev – 14 Abr 2026</div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Casos Analisados</div><div class="kpi-val kv-c">1.759</div><div class="kpi-sub">total do período</div></div>
+    <div class="kpi"><div class="kpi-label">Assertividade</div><div class="kpi-val kv-g">94,0%</div><div class="kpi-sub">decisão = correta</div><div class="kpi-note">1.651 corretas · 105 erros</div></div>
+    <div class="kpi"><div class="kpi-label">Erro de Processo</div><div class="kpi-val kv-y">25,0%</div><div class="kpi-sub">gap no processo da IA</div><div class="kpi-note">439 de 1.756 casos</div></div>
+    <div class="kpi"><div class="kpi-label">Side Effect NOK</div><div class="kpi-val kv-r">6,0%</div><div class="kpi-sub">e-mail / push indevido</div><div class="kpi-note">mínimo histórico ↓</div></div>
+    <div class="kpi"><div class="kpi-label">Info. Ignorada</div><div class="kpi-val kv-o">3,7%</div><div class="kpi-sub">IA ignorou dado relevante</div><div class="kpi-note">62 de 1.690 casos</div></div>
+    <div class="kpi"><div class="kpi-label">Contestações</div><div class="kpi-val kv-w">2,7%</div><div class="kpi-sub">casos contestados</div><div class="kpi-note">45 de 1.692 casos</div></div>
+    <div class="kpi"><div class="kpi-label">Anotadores</div><div class="kpi-val kv-p">7</div><div class="kpi-sub">100% humanos</div></div>
+    <div class="kpi"><div class="kpi-label">Labels Geradas</div><div class="kpi-val kv-b">15.744</div><div class="kpi-sub">~8,9 por caso</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Performance por Anotador</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Anotador</th>
+              <th>Casos</th>
+              <th>Assertividade</th>
+              <th>Erro Proc.</th>
+              <th>Side Eff. NOK</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Michelle Santos</strong></td>
+              <td>823</td>
+              <td><span class="badge badge-g">98,1%</span></td>
+              <td><span class="badge badge-g">4,9%</span></td>
+              <td><span class="badge badge-g">0%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Angel Roberto</strong></td>
+              <td>266</td>
+              <td><span class="badge badge-g">97,4%</span></td>
+              <td><span class="badge badge-y">28,6%</span></td>
+              <td><span class="badge badge-r">20,7%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Camila Bomfim</strong></td>
+              <td>647</td>
+              <td><span class="badge badge-y">86,9%</span></td>
+              <td><span class="badge badge-r">47,3%</span></td>
+              <td><span class="badge badge-y">7,9%</span></td>
+            </tr>
+            <tr>
+              <td>Carolina Staianov</td>
+              <td>13</td>
+              <td><span class="badge badge-g">100%</span></td>
+              <td><span class="badge badge-r">84,6%</span></td>
+              <td><span class="badge badge-g">0%</span></td>
+            </tr>
+            <tr>
+              <td>Nathalia Gomes</td>
+              <td>6</td>
+              <td><span class="badge badge-y">66,7%</span></td>
+              <td><span class="badge badge-y">50,0%</span></td>
+              <td><span class="badge badge-g">0%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.62rem;color:var(--dim);margin-top:0.7rem">* Camila apresenta maior divergência nos critérios de erro de processo — ponto de calibração prioritário. Angel tem side effect NOK elevado vs. assertividade alta.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Dados Ignorados pela IA · Categorias</div>
+      <div class="bar-row">
+        <span class="bar-lbl">Nenhum dado ignorado</span>
+        <div class="bar-track"><div class="bar-fill" style="width:73.3%;background:var(--dim)"></div></div>
+        <span class="bar-pct" style="color:var(--muted)">73,3%</span>
+        <span class="bar-n">880</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">⏳ Tempo de conta</span>
+        <div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--purple)"></div></div>
+        <span class="bar-pct" style="color:var(--purple2)">15,6%</span>
+        <span class="bar-n">187</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">🚨 Contrapartes fraudulentas</span>
+        <div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--red)"></div></div>
+        <span class="bar-pct" style="color:var(--red)">8,1%</span>
+        <span class="bar-n">97</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">💥 Colisões</span>
+        <div class="bar-track"><div class="bar-fill" style="width:14%;background:var(--blue)"></div></div>
+        <span class="bar-pct" style="color:var(--blue)">3,8%</span>
+        <span class="bar-n">45</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">⏱️ Timing (evasão)</span>
+        <div class="bar-track"><div class="bar-fill" style="width:9%;background:var(--cyan)"></div></div>
+        <span class="bar-pct" style="color:var(--cyan)">2,4%</span>
+        <span class="bar-n">29</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">💰 Transações</span>
+        <div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--yellow)"></div></div>
+        <span class="bar-pct" style="color:var(--yellow)">2,2%</span>
+        <span class="bar-n">26</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">📋 Contestações prévias</span>
+        <div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--green)"></div></div>
+        <span class="bar-pct" style="color:var(--green)">0,7%</span>
+        <span class="bar-n">8</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERROS DA IA ============ -->
+<section id="erros">
+  <div class="sec-head"><span class="sec-icon">🤖</span>Erros da IA · Classificação</div>
+  <div class="grid-2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Tipos de erro identificados</div>
+      <div class="bar-row">
+        <span class="bar-lbl">🔴 Viés Positivo (positive-bias)</span>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div>
+        <span class="bar-pct" style="color:var(--red)">~18,8%</span>
+        <span class="bar-n">~330</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">🟡 Prompt Incoerente (incoherent-prompt)</span>
+        <div class="bar-track"><div class="bar-fill" style="width:28%;background:var(--yellow)"></div></div>
+        <span class="bar-pct" style="color:var(--yellow)">~5%</span>
+        <span class="bar-n">~22</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">🟠 Info. não considerada</span>
+        <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--orange)"></div></div>
+        <span class="bar-pct" style="color:var(--orange)">~3,7%</span>
+        <span class="bar-n">~62</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">🟣 Informação irreal (unreal-information)</span>
+        <div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--purple)"></div></div>
+        <span class="bar-pct" style="color:var(--purple2)">~3,1%</span>
+        <span class="bar-n">~59</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">🔵 Viés Negativo (negative-bias)</span>
+        <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--blue)"></div></div>
+        <span class="bar-pct" style="color:var(--blue)">~0,6%</span>
+        <span class="bar-n">~10</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Concentração de erros por anotador</div>
+      <ul class="item-list">
+        <li>
+          <span class="item-dot" style="background:var(--cyan)"></span>
+          <span><strong>Michelle Santos (823 casos):</strong> Erros concentrados em <em>incoherent-prompt</em> (16 casos) — sugere casos onde o prompt gerou conclusão inconsistente com as informações disponíveis. Assertividade 98,1% — padrão de referência para o time.</span>
+        </li>
+        <li>
+          <span class="item-dot" style="background:var(--cyan)"></span>
+          <span><strong>Camila Bomfim (647 casos):</strong> 306 casos de viés positivo identificados — representa a grande maioria dos erros de viés do período. Alto erro de processo (47,3%) sinaliza possível divergência nos critérios de avaliação. <em>Ponto prioritário de calibração.</em></span>
+        </li>
+        <li>
+          <span class="item-dot" style="background:var(--cyan)"></span>
+          <span><strong>Angel Roberto (266 casos):</strong> Distribuição mais equilibrada entre positive-bias (51) e unreal-information (47). Side effect NOK alto (20,7%) merece investigação sobre os casos de e-mail/push indevido.</span>
+        </li>
+      </ul>
+      <div style="margin-top:0.8rem;padding:0.7rem;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:0.7rem;color:var(--muted);line-height:1.5">
+        ⚠️ A divergência entre anotadores nos critérios de erro de processo e viés positivo indica necessidade urgente de calibração interna antes de gerar insumos consolidados para o time de FPF.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ O QUE ESTÁ FUNCIONANDO ============ -->
+<section id="o-que-funciona">
+  <div class="sec-head"><span class="sec-icon">✅</span>O que está dando certo</div>
+  <div class="insight-grid">
+    <div class="insight">
+      <div class="insight-icon">🎯</div>
+      <div class="insight-title">Alta Assertividade Global</div>
+      <div class="insight-body">94% das decisões do Meditite foram classificadas como corretas. O Databricks confirma 95% de accuracy. O agente opera com alto padrão de acerto, especialmente em perfis com longo histórico legítimo.</div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📉</div>
+      <div class="insight-title">Side Effects em Queda</div>
+      <div class="insight-body">Taxa de side effect NOK caiu para 6% — menor nível histórico do projeto. Indica que envios indevidos de e-mail/push estão sendo progressivamente reduzidos com as iterações do agente.</div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📊</div>
+      <div class="insight-title">Infraestrutura de Dados Sólida</div>
+      <div class="insight-body">Plataforma de Data Labeling (Shuffle) funcionando com rigor. Dashboard GitHub Pages com visão individual por anotador. Grafana de ops monitorando rollout em tempo real. Nenhum dado perdido.</div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🏃</div>
+      <div class="insight-title">Ritmo de Monitorias Sustentado</div>
+      <div class="insight-body">Após queda na semana de 23/03 (78 casos), as últimas 3 semanas mantêm 3 analistas ativas com volume acelerado. Semana de retomada (30 Mar–01 Abr) foi a maior de todo o projeto: 366 casos em 3 dias.</div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🤝</div>
+      <div class="insight-title">Rituais de Calibração entre Anotadoras</div>
+      <div class="insight-body">A partir de início de abril, as anotadoras que fazem as monitorias no Shuffle passaram a ter sessões regulares de calibração entre si — com o objetivo de aumentar o alinhamento nos critérios de avaliação e colher insights mais consistentes sobre os erros do agente.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ O QUE NÃO FUNCIONOU ============ -->
+<section id="gaps">
+  <div class="sec-head"><span class="sec-icon">⚠️</span>Gaps Identificados · O que não funcionou como esperado</div>
+  <div class="grid-2">
+    <div style="display:flex;flex-direction:column;gap:0.75rem">
+
+      <div class="sug-card red-l">
+        <div class="sug-label">Gap Crítico — IA</div>
+        <div class="sug-title">Viés Positivo: IA superestima perfis legítimos</div>
+        <div class="sug-body">330 casos (18,8% do total) com viés positivo identificado. O Meditite tende a avaliar positivamente demais clientes com histórico longo, ignorando sinais de alerta presentes no momento da análise. Maior padrão de erro do projeto — impacto direto em falsos negativos e potenciais perdas financeiras.</div>
+      </div>
+
+      <div class="sug-card red-l">
+        <div class="sug-label">Gap Crítico — IA</div>
+        <div class="sug-title">Tempo de conta: principal dado ignorado</div>
+        <div class="sug-body">187 casos (15,6%) onde o tempo de conta não foi considerado pela IA. Contas novas com comportamento suspeito estão sendo arquivadas sem ponderar adequadamente o risco de uma conta recém-criada. É o gap de dados #1 identificado nas monitorias.</div>
+      </div>
+
+      <div class="sug-card yellow-l">
+        <div class="sug-label">Gap — IA</div>
+        <div class="sug-title">Evasão noturna e timing não capturados</div>
+        <div class="sug-body">Caso documentado: IA arquivou report de R$149k, cliente tentou evasão às 1h da manhã (minutos após o release). 29 casos (2,4%) com timing de evasão identificado como dado ignorado. O agente não pondera adequadamente o horário e a velocidade de movimentação como sinal de alerta.</div>
+      </div>
+
+      <div class="sug-card yellow-l">
+        <div class="sug-label">Gap — IA</div>
+        <div class="sug-title">Contrapartes fraudulentas não ponderadas</div>
+        <div class="sug-body">97 casos (8,1%) onde a IA ignorou contrapartes com histórico de fraude (mule accounts, PIXBET, entidades sinalizadas). Caso crítico: beneficiário PIXBET previamente categorizado como mule account — IA não usou essa informação para reverter a decisão.</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:0.75rem">
+      <div class="sug-card orange-l">
+        <div class="sug-label">Gap — Processo</div>
+        <div class="sug-title">Erro de processo alto (25%) — gap estrutural</div>
+        <div class="sug-body">1 em cada 4 casos com algum erro no processo da IA. Taxa ainda elevada mesmo com tendência de queda. Parte dos erros reflete incoerências no prompt (não na decisão em si), o que sugere que o agente segue uma lógica internamente inconsistente em determinados cenários.</div>
+      </div>
+
+      <div class="sug-card orange-l">
+        <div class="sug-label">Gap — Operacional</div>
+        <div class="sug-title">Analistas desconsiderando reportes do Meditite</div>
+        <div class="sug-body">Identificado que analistas da operação estavam ignorando ou não considerando adequadamente os reportes registrados pelo Meditite ao fazer análises humanas subsequentes. Gera inconsistência na cadeia decisória e mina a confiabilidade do ciclo de feedback.</div>
+      </div>
+
+      <div class="sug-card orange-l">
+        <div class="sug-label">Gap — Produto</div>
+        <div class="sug-title">Comunicação de desbloqueio ao cliente ausente</div>
+        <div class="sug-body">Meditite bloqueia conta temporariamente mas não envia push de desbloqueio ao cliente quando a conta é liberada. Gera confusão e contact rate desnecessário. Identificado por Nathalia Gomes em sessão de brainstorming com o time de CX.</div>
+      </div>
+
+      <div class="sug-card">
+        <div class="sug-label">Gap — Calibração</div>
+        <div class="sug-title">Divergência entre anotadores nos critérios</div>
+        <div class="sug-body">Camila Bomfim apresenta 47,3% de erro de processo vs. 4,9% da Michelle Santos — diferença expressiva que indica divergência na aplicação dos critérios de avaliação. Reduz a confiabilidade dos dados agregados e exige calibração interna antes de consolidar insights para o prompt.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUGESTÕES DE MELHORIA ============ -->
+<section id="sugestoes">
+  <div class="sec-head"><span class="sec-icon">💡</span>Sugestões de Melhoria</div>
+
+  <div style="display:flex;flex-direction:column;gap:1rem">
+
+    <!-- PROMPT -->
+    <div class="card">
+      <div class="card-title">🔧 Melhorias de Prompt — Prioridade Alta</div>
+      <div class="grid-2">
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <div style="padding:0.8rem;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:8px">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--purple2);margin-bottom:0.3rem">1. Incluir "Tempo de Conta" como critério explícito</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.55">O dado mais ignorado (15,6%). O prompt deve instruir o agente a ponderar negativamente contas recentes com movimentações atípicas, mesmo que o histórico das transações disponíveis pareça normal. Sugestão: adicionar threshold de meses de conta como fator de risco explícito.</div>
+          </div>
+          <div style="padding:0.8rem;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--red2);margin-bottom:0.3rem">2. Reduzir o Viés Positivo</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.55">Instruir o agente a não deixar um histórico longo de transações legítimas ofuscar sinais de alerta presentes. Adicionar instrução explícita: "histórico legítimo extenso reduz, mas não elimina o risco — avalie sempre os sinais de alerta atuais de forma independente". Exemplos de falsos negativos devem ser incluídos no few-shot.</div>
+          </div>
+          <div style="padding:0.8rem;background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:8px">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--cyan);margin-bottom:0.3rem">3. Timing de evasão como sinal de alerta</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.55">Incluir análise do horário da tentativa de movimentação (evasão noturna = maior risco) e da velocidade de ação após o release do report. Caso do R$149k: evasão 1h da manhã minutos após release — esse padrão deveria ter bloqueado o arquivamento automático.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <div style="padding:0.8rem;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--red2);margin-bottom:0.3rem">4. Contrapartes fraudulentas — peso maior</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.55">97 casos onde o agente ignorou contrapartes marcadas como mule accounts ou com histórico de fraude. O prompt deve instruir: qualquer beneficiário com classificação de risco elevado (PIXBET, FF reclassificado, mule account) deve elevar significativamente o threshold de decisão para arquivar.</div>
+          </div>
+          <div style="padding:0.8rem;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--yellow2);margin-bottom:0.3rem">5. Revisão das colisões: volume vs. presença</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.55">Gap técnico identificado no backtesting: produção considera volume de colisões (ex: 10 colisões IP com fraudadores), enquanto o notebook usou apenas presença binária (0 ou 1). O prompt deve refletir o peso do volume e não apenas a existência de colisões.</div>
+          </div>
+          <div style="padding:0.8rem;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:8px">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--purple2);margin-bottom:0.3rem">6. Olhar casos onde Meditite "acusa" fraudador</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.55">Sugestão de Nathalia Gomes: analisar os casos onde o Meditite classifica como fraudador para entender onde está sendo muito agressivo. Isso ajuda a aumentar a taxa de arquivamento (eficiência) sem comprometer a precisão — impacto direto nos KRs da BU.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPERACIONAL -->
+    <div class="card">
+      <div class="card-title">⚙️ Melhorias Operacionais e de Processo</div>
+      <div class="grid-3">
+        <div style="padding:0.85rem;background:var(--s2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:0.7rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Calibração interna antes de consolidar insights</div>
+          <div style="font-size:0.68rem;color:var(--muted);line-height:1.55">Alinhar critérios entre Michelle, Camila e Angel antes de enviar dados consolidados ao time de produto. A divergência atual (erro processo 4,9% vs. 47,3%) compromete a qualidade dos insumos enviados para o prompt.</div>
+        </div>
+        <div style="padding:0.85rem;background:var(--s2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:0.7rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Palavras-chave padronizadas para reportes</div>
+          <div style="font-size:0.68rem;color:var(--muted);line-height:1.55">Criar conjunto de palavras-chave obrigatórias para que analistas da operação registrem reportes sobre o Meditite de forma padronizada. Facilita rastreabilidade, análise quantitativa e identificação de padrões. (Proposta de Camila Bomfim)</div>
+        </div>
+        <div style="padding:0.85rem;background:var(--s2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:0.7rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Push de desbloqueio ao cliente</div>
+          <div style="font-size:0.68rem;color:var(--muted);line-height:1.55">Implementar notificação push quando o Meditite libera a conta após bloqueio temporário. Reduz contact rate e fricção na jornada do cliente legítimo. (Identificado por Nathalia Gomes + time de CX)</div>
+        </div>
+        <div style="padding:0.85rem;background:var(--s2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:0.7rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Revisar label "informação não considerada"</div>
+          <div style="font-size:0.68rem;color:var(--muted);line-height:1.55">O conceito atual mistura informações que o agente não tem acesso com informações que ele tem mas decidiu não usar. Separar esses dois casos permite gerar insumos mais precisos: um para engenharia (adicionar dado) e outro para prompt (instruir uso do dado).</div>
+        </div>
+        <div style="padding:0.85rem;background:var(--s2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:0.7rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Monitorar tempo de decisão do Meditite</div>
+          <div style="font-size:0.68rem;color:var(--muted);line-height:1.55">Adicionar ao dashboard o tempo que o Meditite leva para tomar cada decisão. Métrica relevante para CX: clientes bloqueados percebem o tempo de espera. Proposta de Jessica De Sousa ao time de engenharia.</div>
+        </div>
+        <div style="padding:0.85rem;background:var(--s2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:0.7rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Alinhar operação sobre reportes do Meditite</div>
+          <div style="font-size:0.68rem;color:var(--muted);line-height:1.55">Formalizar diretriz para analistas da operação sobre como tratar reportes do Meditite em análises subsequentes — quando devem, e quando não devem, sobrescrever a decisão do agente. Reduz inconsistência na cadeia decisória.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ PRÓXIMOS PASSOS ============ -->
+<section id="proximos-passos">
+  <div class="sec-head"><span class="sec-icon">🚀</span>Próximos Passos</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Ações Imediatas (≤ 2 semanas)</div>
+      <ul class="item-list">
+        <li><span class="item-dot" style="background:var(--red)"></span><span><strong>Calibração interna</strong> entre anotadores: alinhar critérios de erro de processo e viés positivo antes de consolidar dados para o time de FPF</span></li>
+        <li><span class="item-dot" style="background:var(--red)"></span><span><strong>Separar labels</strong> de "informação não considerada": distinguir dado inacessível vs. dado disponível mas ignorado pelo agente</span></li>
+        <li><span class="item-dot" style="background:var(--yellow)"></span><span><strong>Criar documento de questões</strong> para Nathalia Gomes com os principais gaps identificados em monitorias (lista viva, atualizada pelo time)</span></li>
+        <li><span class="item-dot" style="background:var(--yellow)"></span><span><strong>Formalizar palavras-chave</strong> para registro de reportes do Meditite pela operação</span></li>
+        <li><span class="item-dot" style="background:var(--green)"></span><span><strong>Alinhar com FPF</strong> priorização das sugestões de prompt (tempo de conta, viés positivo, timing) para próxima iteração</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Ações de Médio Prazo (Q2 2026)</div>
+      <ul class="item-list">
+        <li><span class="item-dot" style="background:var(--purple)"></span><span><strong>RFC do projeto</strong> Meditite: documentação formal no padrão do time de Quality com owner, métricas e ciclo de revisão</span></li>
+        <li><span class="item-dot" style="background:var(--blue)"></span><span><strong>Estruturar reporte mensal</strong> de insights de Quality → FPF com Time-to-Insight ≤ 5 dias (alinhado ao KR 3.2)</span></li>
+        <li><span class="item-dot" style="background:var(--cyan)"></span><span><strong>Analisar casos de falso positivo</strong> do Meditite (onde classifica como fraudador): oportunidade para aumentar taxa de arquivamento sem perda de precisão</span></li>
+        <li><span class="item-dot" style="background:var(--green)"></span><span><strong>Avançar Quality Audit com IA</strong> para o próprio Meditite: usar IA para auditar monitorias e escalar cobertura sem aumentar headcount</span></li>
+        <li><span class="item-dot" style="background:var(--yellow)"></span><span><strong>Implementar push de desbloqueio</strong> ao cliente e medir impacto no contact rate pós-análise do Meditite</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div><!-- /page -->
+
+<footer>
+  <span>AI Agent — Meditite · One Pager · Quality Fraud · InvOps Brasil</span>
+  <span>Elaborado por: Ana Carolina Baisch · 16 Abr 2026</span>
+  <span>Dados: Data Labeling (Shuffle) · Período: 20 Fev – 14 Abr 2026 · 1.759 casos</span>
+</footer>
+
+</body>
+</html>
