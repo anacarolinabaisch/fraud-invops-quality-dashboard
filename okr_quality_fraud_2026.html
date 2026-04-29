@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OKRs — Quality Team H1 2026</title>
+<style>
+  :root {
+    --nu-purple: #8A05BE;
+    --nu-purple-light: #f3e8fb;
+    --nu-purple-mid: #c77dff;
+    --nu-blue: #2563eb;
+    --nu-blue-light: #eff6ff;
+    --nu-blue-mid: #93c5fd;
+    --nu-teal: #0d9488;
+    --nu-teal-light: #f0fdfa;
+    --nu-teal-mid: #5eead4;
+    --nu-green: #16a34a;
+    --nu-gray: #6b7280;
+    --nu-gray-light: #f9fafb;
+    --nu-gray-border: #e5e7eb;
+    --nu-dark: #111827;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f6; color: var(--nu-dark); min-height: 100vh; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #8A05BE 0%, #5b21b6 100%); color: white; padding: 40px 32px 32px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: rgba(255,255,255,0.06); border-radius: 50%; }
+  .header::after { content: ''; position: absolute; bottom: -40px; right: 120px; width: 140px; height: 140px; background: rgba(255,255,255,0.04); border-radius: 50%; }
+  .header-inner { max-width: 1040px; margin: 0 auto; position: relative; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+  .header-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+  .header h1 { font-size: 28px; font-weight: 800; margin: 20px 0 6px; }
+  .header h1 span { opacity: 0.7; font-weight: 400; font-size: 20px; display: block; margin-bottom: 4px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .header-meta-item { font-size: 13px; opacity: 0.8; }
+  .header-meta-item strong { display: block; font-size: 18px; font-weight: 700; opacity: 1; color: white; }
+
+  /* SCORECARD */
+  .scorecard { max-width: 1040px; margin: -20px auto 0; padding: 0 24px; position: relative; z-index: 10; }
+  .scorecard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .score-card { background: white; border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow-lg); border-top: 3px solid var(--nu-purple); }
+  .score-card:nth-child(2) { border-top-color: var(--nu-blue); }
+  .score-card:nth-child(3) { border-top-color: var(--nu-teal); }
+  .score-card:nth-child(4) { border-top-color: #f59e0b; }
+  .score-num { font-size: 32px; font-weight: 800; color: var(--nu-purple); }
+  .score-card:nth-child(2) .score-num { color: var(--nu-blue); }
+  .score-card:nth-child(3) .score-num { color: var(--nu-teal); }
+  .score-card:nth-child(4) .score-num { color: #d97706; }
+  .score-label { font-size: 12px; color: var(--nu-gray); margin-top: 4px; font-weight: 500; }
+
+  /* MAIN */
+  .main { max-width: 1040px; margin: 32px auto; padding: 0 24px 48px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: var(--nu-gray); text-transform: uppercase; margin-bottom: 16px; }
+
+  /* OBJECTIVE */
+  .objective { background: white; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 24px; overflow: hidden; }
+  .objective-header { padding: 24px 28px; border-left: 5px solid var(--nu-purple); background: linear-gradient(135deg, #faf5ff 0%, white 100%); }
+  .objective-2 .objective-header { border-left-color: var(--nu-blue); background: linear-gradient(135deg, #eff6ff 0%, white 100%); }
+  .objective-3 .objective-header { border-left-color: var(--nu-teal); background: linear-gradient(135deg, #f0fdfa 0%, white 100%); }
+  .obj-number { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--nu-purple); text-transform: uppercase; margin-bottom: 6px; }
+  .objective-2 .obj-number { color: var(--nu-blue); }
+  .objective-3 .obj-number { color: var(--nu-teal); }
+  .obj-title { font-size: 19px; font-weight: 700; line-height: 1.3; margin-bottom: 10px; }
+  .obj-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .obj-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; background: var(--nu-purple-light); color: var(--nu-purple); }
+  .objective-2 .obj-tag { background: var(--nu-blue-light); color: var(--nu-blue); }
+  .objective-3 .obj-tag { background: var(--nu-teal-light); color: var(--nu-teal); }
+  .obj-why { font-size: 13px; color: var(--nu-gray); line-height: 1.6; margin-top: 10px; padding: 12px 16px; background: rgba(0,0,0,0.02); border-radius: 8px; }
+
+  /* KR LIST */
+  .kr-list { padding: 8px 0; }
+  .kr-item { border-top: 1px solid var(--nu-gray-border); transition: background 0.15s; }
+  .kr-header { padding: 16px 28px; cursor: pointer; display: flex; align-items: flex-start; gap: 16px; }
+  .kr-header:hover { background: var(--nu-gray-light); }
+  .kr-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--nu-purple-light); color: var(--nu-purple); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .objective-2 .kr-icon { background: var(--nu-blue-light); color: var(--nu-blue); }
+  .objective-3 .kr-icon { background: var(--nu-teal-light); color: var(--nu-teal); }
+  .kr-title-area { flex: 1; }
+  .kr-number { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--nu-gray); text-transform: uppercase; }
+  .kr-title { font-size: 14px; font-weight: 600; line-height: 1.45; margin: 3px 0; }
+  .kr-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .chip { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; letter-spacing: 0.3px; }
+  .chip-q1 { background: #fef3c7; color: #92400e; }
+  .chip-q2 { background: #dbeafe; color: #1e40af; }
+  .chip-h1 { background: #ede9fe; color: #5b21b6; }
+  .chip-ai { background: #fce7f3; color: #9d174d; }
+  .chip-dep { background: #fee2e2; color: #991b1b; }
+  .chip-infra { background: #ecfdf5; color: #065f46; }
+  .chip-target { background: #f0fdf4; color: #166534; }
+  .kr-chevron { color: var(--nu-gray); font-size: 18px; transition: transform 0.2s; margin-top: 6px; flex-shrink: 0; }
+  .kr-item.open .kr-chevron { transform: rotate(90deg); }
+
+  /* KR DETAILS — two-column layout */
+  .kr-details { display: none; padding: 0 28px 24px 80px; }
+  .kr-item.open .kr-details { display: block; }
+
+  .kr-details-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* LEFT COLUMN */
+  .kr-left {}
+  .kr-metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .kr-detail-box { background: var(--nu-gray-light); border-radius: 8px; padding: 11px 12px; border: 1px solid var(--nu-gray-border); }
+  .kr-detail-box label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--nu-gray); display: block; margin-bottom: 3px; }
+  .kr-detail-box span { font-size: 12px; font-weight: 600; color: var(--nu-dark); line-height: 1.3; display: block; }
+  .kr-explain { font-size: 13px; color: #374151; line-height: 1.7; padding: 13px 15px; background: #f9fafb; border-left: 3px solid var(--nu-purple-mid); border-radius: 4px; }
+  .objective-2 .kr-explain { border-left-color: var(--nu-blue-mid); }
+  .objective-3 .kr-explain { border-left-color: var(--nu-teal-mid); }
+  .kr-dep-alert { margin-top: 10px; padding: 10px 14px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; font-size: 12px; color: #9a3412; line-height: 1.5; }
+
+  /* RIGHT COLUMN — BETs */
+  .kr-bets-col {
+    background: var(--nu-gray-light);
+    border: 1px solid var(--nu-gray-border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .kr-bets-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--nu-gray); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .kr-bets-title::before { content: '⚡'; font-size: 11px; }
+  .bet-item {
+    background: white; border-radius: 8px; padding: 10px 12px;
+    margin-bottom: 8px; border-left: 3px solid var(--nu-purple);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .bet-item:last-child { margin-bottom: 0; }
+  .objective-2 .bet-item { border-left-color: var(--nu-blue); }
+  .objective-3 .bet-item { border-left-color: var(--nu-teal); }
+  .bet-item-name { font-size: 12px; font-weight: 700; color: var(--nu-dark); margin-bottom: 3px; }
+  .bet-item-desc { font-size: 11px; color: #6b7280; line-height: 1.4; }
+
+  /* GLOSSARY */
+  .glossary-section { margin-top: 32px; }
+  .glossary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .glossary-item { background: white; border-radius: 8px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .glossary-term { font-size: 13px; font-weight: 700; color: var(--nu-purple); margin-bottom: 4px; }
+  .glossary-def { font-size: 12px; color: #4b5563; line-height: 1.5; }
+
+  /* NEXT STEPS */
+  .next-steps { margin-top: 32px; }
+  .steps-group { margin-bottom: 20px; }
+  .steps-group-title { font-size: 12px; font-weight: 700; color: var(--nu-gray); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .step-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: white; border-radius: 8px; margin-bottom: 6px; box-shadow: var(--shadow); cursor: pointer; transition: opacity 0.2s; }
+  .step-item.done { opacity: 0.5; text-decoration: line-through; }
+  .step-checkbox { width: 16px; height: 16px; border: 2px solid var(--nu-gray-border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; background: white; }
+  .step-item.done .step-checkbox { background: var(--nu-green); border-color: var(--nu-green); }
+  .step-checkbox::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; display: none; }
+  .step-item.done .step-checkbox::after { display: block; }
+  .step-text { font-size: 13px; color: #374151; line-height: 1.4; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 32px; color: var(--nu-gray); font-size: 12px; border-top: 1px solid var(--nu-gray-border); margin-top: 48px; background: white; }
+
+  @media (max-width: 700px) {
+    .scorecard-grid { grid-template-columns: repeat(2, 1fr); }
+    .glossary-grid { grid-template-columns: 1fr; }
+    .kr-metric-grid { grid-template-columns: 1fr 1fr; }
+    .kr-details-layout { grid-template-columns: 1fr; }
+    .header { padding: 28px 20px 24px; }
+    .main { padding: 0 16px 40px; }
+    .scorecard { padding: 0 16px; }
+    .kr-details { padding: 0 16px 16px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="header-badge">Quality Team · InvOps Brasil</div>
+      <div class="header-badge">H1 2026</div>
+    </div>
+    <h1>
+      <span>OKRs</span>
+      Elevar o padrão operacional de investigações com governança, assertividade e insights que geram melhoria real.
+    </h1>
+    <div class="header-meta">
+      <div class="header-meta-item"><strong>3</strong> Objetivos</div>
+      <div class="header-meta-item"><strong>7</strong> Key Results</div>
+      <div class="header-meta-item"><strong>14</strong> BETs</div>
+      <div class="header-meta-item"><strong>Jan–Jun</strong> 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="scorecard">
+  <div class="scorecard-grid">
+    <div class="score-card"><div class="score-num">3</div><div class="score-label">Objetivos</div></div>
+    <div class="score-card"><div class="score-num">7</div><div class="score-label">Key Results</div></div>
+    <div class="score-card"><div class="score-num">14</div><div class="score-label">BETs</div></div>
+    <div class="score-card"><div class="score-num">H1</div><div class="score-label">Ciclo 2026</div></div>
+  </div>
+</div>
+
+<div class="main">
+  <p class="section-label" style="margin-top:32px;">Objetivos e Key Results</p>
+
+  <!-- ═══ OBJETIVO 1 ═══ -->
+  <div class="objective">
+    <div class="objective-header">
+      <div class="obj-number">Objetivo 1</div>
+      <div class="obj-title">Elevar a Maturidade e Governança da Frente de Qualidade</div>
+      <div class="obj-meta">
+        <span class="obj-tag">Strengthen our Protection Framework</span>
+        <span class="obj-tag">Boost Efficiency</span>
+      </div>
+      <div class="obj-why">Para que a monitoria seja confiável e escalável, precisamos de uma infraestrutura de dados robusta e de uma base de conhecimento organizada que suporte o crescimento sem perda de rigor técnico.</div>
+    </div>
+    <div class="kr-list">
+
+      <!-- KR 1.1 -->
+      <div class="kr-item" onclick="toggle(this)">
+        <div class="kr-header">
+          <div class="kr-icon">1.1</div>
+          <div class="kr-title-area">
+            <div class="kr-number">Key Result 1.1</div>
+            <div class="kr-title">Migrar 100% das monitorias de InvOps BR do SPOT para a plataforma de Data Labeling, reduzindo o % de ajustes retroativos nas métricas de qualidade dos analistas (baseline a levantar em Q1)</div>
+            <div class="kr-chips">
+              <span class="chip chip-infra">Infraestrutura</span>
+              <span class="chip chip-q1">Q1 piloto + baseline</span>
+              <span class="chip chip-q2">Q2 operação plena</span>
+            </div>
+          </div>
+          <span class="kr-chevron">›</span>
+        </div>
+        <div class="kr-details">
+          <div class="kr-details-layout">
+            <div class="kr-left">
+              <div class="kr-metric-grid">
+                <div class="kr-detail-box"><label>Baseline</label><span>Volume de ajustes retroativos no SPOT historicamente elevado — a quantificar em Q1</span></div>
+                <div class="kr-detail-box"><label>Meta</label><span>100% migrado + redução significativa de ajustes retroativos (target pós-piloto)</span></div>
+                <div class="kr-detail-box"><label>Stretch</label><span>Zero ajustes retroativos por ciclo a partir de Q2</span></div>
+              </div>
+              <div class="kr-explain">
+                Estamos saindo do <strong>SPOT</strong> — plataforma que gerou um volume historicamente elevado de ajustes retroativos nas métricas dos analistas — e migrando para uma plataforma de Data Labeling integrada ao Shuffle. Com dados capturados de forma estruturada e rastreável desde o início, eliminamos o retrabalho de corrigir métricas após o fechamento do ciclo e aumentamos a confiança nos números reportados.<br><br>
+                <strong>Como medir:</strong> % de monitorias que geraram ajuste retroativo na métrica do analista por ciclo — antes vs. depois da migração.
+              </div>
+            </div>
+            <div class="kr-bets-col">
+              <div class="kr-bets-title">Apostas (BETs)</div>
+              <div class="bet-item">
+                <div class="bet-item-name">Migração para plataforma Data Labeling</div>
+                <div class="bet-item-desc">Projeto central do H1: migrar todas as monitorias para o Shuffle em parceria com o time de Data Labeling — mapeamento de campos, configuração de formulários e validação de dados.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Pipeline de dados automatizado</div>
+                <div class="bet-item-desc">Construir pipeline que gera automaticamente insumos para os relatórios por distrito — eliminando planilhas manuais e reduzindo o Time-to-Insight.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KR 1.2 -->
+      <div class="kr-item" onclick="toggle(this)">
+        <div class="kr-header">
+          <div class="kr-icon">1.2</div>
+          <div class="kr-title-area">
+            <div class="kr-number">Key Result 1.2</div>
+            <div class="kr-title">Base de conhecimento do time 100% atualizada, padronizada e com gestão contínua (Confluence, Drive e RFCs de todos os projetos ativos)</div>
+            <div class="kr-chips">
+              <span class="chip chip-q1">Q1 inventário</span>
+              <span class="chip chip-q2">Q2 gestão contínua</span>
+            </div>
+          </div>
+          <span class="kr-chevron">›</span>
+        </div>
+        <div class="kr-details">
+          <div class="kr-details-layout">
+            <div class="kr-left">
+              <div class="kr-metric-grid">
+                <div class="kr-detail-box"><label>Baseline</label><span>Docs desatualizados, sem padrão e sem owner</span></div>
+                <div class="kr-detail-box"><label>Meta</label><span>100% projetos com RFC; Confluence organizado</span></div>
+                <div class="kr-detail-box"><label>Stretch</label><span>Dashboard de status da documentação</span></div>
+              </div>
+              <div class="kr-explain">
+                Toda decisão do time documentada: problema, solução, por que, dono. Drive e Confluence com gestão ativa — owner por documento, ciclo de revisão de 90 dias, estrutura de pastas padronizada. Documentação bem feita reduz dependência de pessoas e facilita onboarding.
+              </div>
+            </div>
+            <div class="kr-bets-col">
+              <div class="kr-bets-title">Apostas (BETs)</div>
+              <div class="bet-item">
+                <div class="bet-item-name">Inventário e padronização de RFCs</div>
+                <div class="bet-item-desc">Levantar todos os projetos ativos, criar template de RFC padronizado e documentar projetos sem registro formal.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Gestão contínua do Confluence e Drive</div>
+                <div class="bet-item-desc">Owner por documento, ciclo de revisão de 90 dias, estrutura de pastas padrão e ritual mensal de "limpeza" de docs desatualizados.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ OBJETIVO 2 ═══ -->
+  <div class="objective objective-2">
+    <div class="objective-header">
+      <div class="obj-number">Objetivo 2</div>
+      <div class="obj-title">Garantir Assertividade Operacional e Reduzir Erros de Decisão</div>
+      <div class="obj-meta">
+        <span class="obj-tag">Deliver Brilliant Basics</span>
+        <span class="obj-tag">Strengthen our Protection Framework</span>
+      </div>
+      <div class="obj-why">Qualidade não é só medir — é ser referência em assertividade. A Quality Audit com IA fecha o ciclo: auditamos as próprias monitorias dos qualiters, garantindo que quem avalia a operação também é avaliado com rigor, escala e consistência.</div>
+    </div>
+    <div class="kr-list">
+
+      <!-- KR 2.1 -->
+      <div class="kr-item" onclick="toggle(this)">
+        <div class="kr-header">
+          <div class="kr-icon">2.1</div>
+          <div class="kr-title-area">
+            <div class="kr-number">Key Result 2.1</div>
+            <div class="kr-title">Implementar Quality Audit com IA atingindo ≥ 90% de precisão nas avaliações auditadas, simultaneamente ao mapeamento de padrões de erro recorrentes dos qualiters para criação de insumos estruturados</div>
+            <div class="kr-chips">
+              <span class="chip chip-ai">✦ IA</span>
+              <span class="chip chip-target">≥ 90% precisão</span>
+              <span class="chip chip-dep">⚠ Depende KR 1.1</span>
+              <span class="chip chip-q1">Q1–Q2 simultâneo</span>
+            </div>
+          </div>
+          <span class="kr-chevron">›</span>
+        </div>
+        <div class="kr-details">
+          <div class="kr-details-layout">
+            <div class="kr-left">
+              <div class="kr-metric-grid">
+                <div class="kr-detail-box"><label>Baseline</label><span>Projeto parado — sem dados sistematizados sobre erros dos qualiters</span></div>
+                <div class="kr-detail-box"><label>Meta</label><span>≥ 3 categorias de erro mapeadas + Quality Audit com IA operando com ≥ 90% de precisão</span></div>
+                <div class="kr-detail-box"><label>Stretch</label><span>Redução mensurável de inconsistências nos primeiros ciclos de auditoria</span></div>
+              </div>
+              <div class="kr-explain">
+                Os dois processos acontecem <strong>em paralelo e se alimentam:</strong> enquanto mapeamos os padrões de erro mais recorrentes dos qualiters (ex: aplicação incorreta de critérios, classificação inconsistente entre Erro Crítico e Erro de Processo, vereditos sem justificativa), esses padrões vão diretamente para a configuração do modelo de IA. Não esperamos o catálogo completo para começar — construímos juntos.<br><br>
+                O target de <strong>≥ 90% de precisão</strong> significa que dos casos avaliados pelo qualiter e auditados pela IA, 90% ou mais devem ser confirmados como corretos pelo revisor humano.
+              </div>
+              <div class="kr-dep-alert">⚠ <strong>Dependência:</strong> O mapeamento de padrões pode começar imediatamente. A operação da Quality Audit com IA depende da estabilização da plataforma de Data Labeling (KR 1.1) e do alinhamento com o time de IA.</div>
+            </div>
+            <div class="kr-bets-col">
+              <div class="kr-bets-title">Apostas (BETs)</div>
+              <div class="bet-item">
+                <div class="bet-item-name">Mapeamento de padrões de erro dos qualiters</div>
+                <div class="bet-item-desc">Analisar amostras de monitorias dos últimos ciclos para identificar e documentar as 3+ categorias de erro mais recorrentes — corre em paralelo ao desenvolvimento do modelo de IA.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Desenvolvimento do modelo de Quality Audit com IA</div>
+                <div class="bet-item-desc">Em conjunto com o time de IA/Data Labeling, configurar o modelo usando os padrões mapeados como critérios de avaliação — diagnóstico e desenvolvimento acontecem simultaneamente.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Quality Audit — operação contínua</div>
+                <div class="bet-item-desc">Após validação do modelo: ciclo mensal de auditorias com IA, relatório de inconsistências por qualiter e plano de ação para desvios recorrentes.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KR 2.2 -->
+      <div class="kr-item" onclick="toggle(this)">
+        <div class="kr-header">
+          <div class="kr-icon">2.2</div>
+          <div class="kr-title-area">
+            <div class="kr-number">Key Result 2.2</div>
+            <div class="kr-title">Reduzir o % de contestações procedentes (erros do próprio time de Quality nos feedbacks dados à operação) para ≤ 1%</div>
+            <div class="kr-chips">
+              <span class="chip chip-q1">Q1 dados disponíveis</span>
+              <span class="chip chip-q2">Q2 2026</span>
+              <span class="chip chip-target">✓ Abaixo da meta</span>
+            </div>
+          </div>
+          <span class="kr-chevron">›</span>
+        </div>
+        <div class="kr-details">
+          <div class="kr-details-layout">
+            <div class="kr-left">
+              <div class="kr-metric-grid">
+                <div class="kr-detail-box"><label>Baseline Q1</label><span>Jan: 0,05% · Fev: 0,03% · Mar: 0,03%</span></div>
+                <div class="kr-detail-box"><label>Meta (Target)</label><span>≤ 1% de contestações procedentes</span></div>
+                <div class="kr-detail-box"><label>Stretch</label><span>≤ 0,50% de contestações procedentes</span></div>
+              </div>
+
+              <!-- Monthly progress bars -->
+              <div style="margin-bottom:12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#6b7280;margin-bottom:8px;">Evolução Mensal — % Contestações Procedentes</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;font-weight:600;color:#374151;width:36px;">Jan</span>
+                    <div style="flex:1;background:#e5e7eb;border-radius:4px;height:10px;position:relative;">
+                      <div style="width:5%;background:#0d9488;border-radius:4px;height:10px;"></div>
+                      <!-- target line at 1% -->
+                      <div style="position:absolute;top:-3px;left:100%;transform:translateX(-1px);width:2px;height:16px;background:#dc2626;border-radius:1px;" title="Meta: 1%"></div>
+                    </div>
+                    <span style="font-size:12px;font-weight:700;color:#0d9488;width:38px;text-align:right;">0,05%</span>
+                  </div>
+
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;font-weight:600;color:#374151;width:36px;">Fev</span>
+                    <div style="flex:1;background:#e5e7eb;border-radius:4px;height:10px;position:relative;">
+                      <div style="width:3%;background:#0d9488;border-radius:4px;height:10px;"></div>
+                    </div>
+                    <span style="font-size:12px;font-weight:700;color:#0d9488;width:38px;text-align:right;">0,03%</span>
+                  </div>
+
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;font-weight:600;color:#374151;width:36px;">Mar</span>
+                    <div style="flex:1;background:#e5e7eb;border-radius:4px;height:10px;position:relative;">
+                      <div style="width:3%;background:#0d9488;border-radius:4px;height:10px;"></div>
+                    </div>
+                    <span style="font-size:12px;font-weight:700;color:#0d9488;width:38px;text-align:right;">0,03%</span>
+                  </div>
+
+                </div>
+                <div style="margin-top:6px;display:flex;align-items:center;gap:6px;">
+                  <div style="width:10px;height:10px;background:#0d9488;border-radius:2px;"></div>
+                  <span style="font-size:10px;color:#6b7280;">Real</span>
+                  <div style="width:10px;height:10px;background:#dc2626;border-radius:2px;margin-left:8px;"></div>
+                  <span style="font-size:10px;color:#6b7280;">Meta ≤ 1% &nbsp;|&nbsp; Stretch ≤ 0,50%</span>
+                </div>
+                <div style="margin-top:8px;padding:8px 12px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:6px;font-size:11px;color:#134e4a;line-height:1.5;">
+                  🟢 Q1 bem abaixo do target (≤ 1%) e do stretch (≤ 0,50%) nos três meses. Tendência estável em 0,03% em Fev/Mar.
+                </div>
+              </div>
+
+              <div class="kr-explain">
+                Contestação procedente = qualiter errou ao dar feedback para a operação. Complementar ao KR 2.1: enquanto a Quality Audit mede a precisão interna das monitorias, as contestações medem como a operação percebe e questiona esses feedbacks — garantindo a credibilidade do time perante os distritos.<br><br>
+                <strong>Como medir:</strong> % de contestações que Quality reconhece como procedentes no período.
+              </div>
+            </div>
+            <div class="kr-bets-col">
+              <div class="kr-bets-title">Apostas (BETs)</div>
+              <div class="bet-item">
+                <div class="bet-item-name">Processo Estruturado de Contestações</div>
+                <div class="bet-item-desc">Redesenhar o fluxo de contestações com SLA claro, critério de aceite/recusa e registro no JIRA — base para definir o baseline e o target.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Office Hours Quality ↔ Lideranças</div>
+                <div class="bet-item-desc">Ritual mensal para líderes de distrito tirarem dúvidas sobre critérios e processos — reduz contestações por falta de alinhamento.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KR 2.3 -->
+      <div class="kr-item" onclick="toggle(this)">
+        <div class="kr-header">
+          <div class="kr-icon">2.3</div>
+          <div class="kr-title-area">
+            <div class="kr-number">Key Result 2.3</div>
+            <div class="kr-title">Manter rituais mensais de calibração com todos os distritos, atingindo ≥ 85% de Alignment Rate entre QAs</div>
+            <div class="kr-chips">
+              <span class="chip chip-q2">A partir de Q2</span>
+            </div>
+          </div>
+          <span class="kr-chevron">›</span>
+        </div>
+        <div class="kr-details">
+          <div class="kr-details-layout">
+            <div class="kr-left">
+              <div class="kr-metric-grid">
+                <div class="kr-detail-box"><label>Baseline</label><span>A definir (levantamento Q1)</span></div>
+                <div class="kr-detail-box"><label>Meta</label><span>≥ 85% de Alignment Rate</span></div>
+                <div class="kr-detail-box"><label>Stretch</label><span>≥ 90%</span></div>
+              </div>
+              <div class="kr-explain">
+                Ritual de calibração "às cegas" (blind scoring): QAs avaliam as mesmas amostras de forma independente. Com a nova plataforma, o Alignment Rate é calculado automaticamente — garantindo que os feedbacks dados à operação são consistentes, independente de quem fez a monitoria.
+              </div>
+            </div>
+            <div class="kr-bets-col">
+              <div class="kr-bets-title">Apostas (BETs)</div>
+              <div class="bet-item">
+                <div class="bet-item-name">Calibração Cega Mensal</div>
+                <div class="bet-item-desc">Rituais de blind scoring entre QAs — amostras cruzadas de distritos diferentes, Alignment Rate calculado e rastreado automaticamente via plataforma de Data Labeling.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ OBJETIVO 3 ═══ -->
+  <div class="objective objective-3">
+    <div class="objective-header">
+      <div class="obj-number">Objetivo 3</div>
+      <div class="obj-title">Gerar Insights e Promover Melhoria Contínua</div>
+      <div class="obj-meta">
+        <span class="obj-tag">Boost Efficiency</span>
+        <span class="obj-tag">Deliver Brilliant Basics</span>
+      </div>
+      <div class="obj-why">O maior risco de um time de Quality é ser percebido como "o time que aponta erros". Precisamos fechar o ciclo: dados classificados de forma granular, avaliadores alinhados e insights chegando na hora certa — gerando melhoria real na operação.</div>
+    </div>
+    <div class="kr-list">
+
+      <!-- KR 3.1 -->
+      <div class="kr-item" onclick="toggle(this)">
+        <div class="kr-header">
+          <div class="kr-icon">3.1</div>
+          <div class="kr-title-area">
+            <div class="kr-number">Key Result 3.1</div>
+            <div class="kr-title">Taxonomia de erros refinada (Erro Crítico vs. Erro de Processo) implementada e adotada em 100% das monitorias</div>
+            <div class="kr-chips">
+              <span class="chip chip-q1">Q1 definição</span>
+              <span class="chip chip-q2">Q2 adoção plena</span>
+            </div>
+          </div>
+          <span class="kr-chevron">›</span>
+        </div>
+        <div class="kr-details">
+          <div class="kr-details-layout">
+            <div class="kr-left">
+              <div class="kr-metric-grid">
+                <div class="kr-detail-box"><label>Baseline</label><span>Classificação atual sem diferenciação de impacto</span></div>
+                <div class="kr-detail-box"><label>Meta</label><span>100% das monitorias com taxonomia aplicada</span></div>
+                <div class="kr-detail-box"><label>Como medir</label><span>% fichas com categorização correta na plataforma</span></div>
+              </div>
+              <div class="kr-explain">
+                <strong>Erro Crítico:</strong> impacto direto ao cliente, regulatório ou financeiro (ex: fechar legítimo como fraudador). <strong>Erro de Processo:</strong> operacional sem impacto direto (ex: não inserir tag). Com essa granularidade configurada na plataforma de Data Labeling, os insights do reporte mensal se tornam muito mais acionáveis.
+              </div>
+            </div>
+            <div class="kr-bets-col">
+              <div class="kr-bets-title">Apostas (BETs)</div>
+              <div class="bet-item">
+                <div class="bet-item-name">Rollout da Taxonomia de Erros</div>
+                <div class="bet-item-desc">Implementar a classificação Crítico vs. Processo na nova plataforma: definição de critérios, alinhamento com liderança e treinamento dos QAs.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Expansão para Novos Fluxos</div>
+                <div class="bet-item-desc">Incluir Controls e Special Investigations nas monitorias formais da plataforma, com taxonomia de erros aplicada desde o início.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KR 3.2 -->
+      <div class="kr-item" onclick="toggle(this)">
+        <div class="kr-header">
+          <div class="kr-icon">3.2</div>
+          <div class="kr-title-area">
+            <div class="kr-number">Key Result 3.2</div>
+            <div class="kr-title">Entregar reporte mensal de insights de QA para 100% dos distritos, com Time-to-Insight ≤ 5 dias úteis após fechamento do ciclo</div>
+            <div class="kr-chips">
+              <span class="chip chip-q1">Q1 piloto</span>
+              <span class="chip chip-q2">Q2 escala total</span>
+            </div>
+          </div>
+          <span class="kr-chevron">›</span>
+        </div>
+        <div class="kr-details">
+          <div class="kr-details-layout">
+            <div class="kr-left">
+              <div class="kr-metric-grid">
+                <div class="kr-detail-box"><label>Baseline</label><span>Reporte descontinuado — monitorias acontecem mas insights não chegam aos distritos. Construção do zero.</span></div>
+                <div class="kr-detail-box"><label>Meta</label><span>100% distritos, ≤ 5 dias úteis</span></div>
+                <div class="kr-detail-box"><label>Stretch</label><span>≤ 3 dias úteis</span></div>
+              </div>
+              <div class="kr-explain">
+                Hoje as monitorias acontecem, mas os insights ficam no time de Quality e <strong>não chegam a quem precisa agir — os distritos.</strong> Estamos criando do zero um processo robusto de entrega mensal: relatório padronizado com principais padrões de erro (Crítico e Processo), filas/analistas com mais oportunidades e Top 3 pontos de ação — com velocidade suficiente para alimentar as decisões do mês. Com a plataforma de Data Labeling (KR 1.1), a taxonomia (KR 3.1) e o dashboard, boa parte do processo passa a ser automatizada.
+              </div>
+            </div>
+            <div class="kr-bets-col">
+              <div class="kr-bets-title">Apostas (BETs)</div>
+              <div class="bet-item">
+                <div class="bet-item-name">Dashboard de insumos de qualiters e distritos</div>
+                <div class="bet-item-desc">Dashboard centralizado com visão por qualiter e por distrito: padrões de erro, volume de monitorias, evolução mensal e Top 3 oportunidades — alimentado pela plataforma de Data Labeling.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Quality Monthly Report + Sync</div>
+                <div class="bet-item-desc">Relatório mensal padronizado com Top 3 padrões de erro por severidade + sync com lideranças de distrito, gerado a partir dos dados do dashboard.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Root Cause Analysis Sistemático</div>
+                <div class="bet-item-desc">Para cada padrão de erro recorrente, gerar RCA estruturado com causa raiz, frequência e plano de ação — entregue junto ao relatório mensal.</div>
+              </div>
+              <div class="bet-item">
+                <div class="bet-item-name">Feedback Loop Quality → L&D Upskill</div>
+                <div class="bet-item-desc">Top 3 padrões de erro do mês alimentam diretamente a agenda de treinamentos do L&D — fechando o ciclo de melhoria.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div class="glossary-section">
+    <p class="section-label" style="margin-top:32px;">Glossário de Métricas</p>
+    <div class="glossary-grid">
+      <div class="glossary-item">
+        <div class="glossary-term">Quality Audit (Auditoria da Auditoria)</div>
+        <div class="glossary-def">Processo com IA que revisa amostras das monitorias feitas pelos qualiters. O target de 90% significa que ≥ 90% dos casos auditados são confirmados como corretos pelo revisor humano.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Precisão da Quality Audit</div>
+        <div class="glossary-def">% de monitorias dos qualiters auditadas pela IA que são confirmadas como corretas. Mede a qualidade das avaliações do próprio time de Quality.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Alignment Rate</div>
+        <div class="glossary-def">Índice de concordância entre QAs ao avaliar as mesmas amostras (calibração cega). Mede consistência do time de Quality.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Contestação Procedente</div>
+        <div class="glossary-def">Operação contesta um apontamento de Quality e Quality reconhece que errou no feedback. Mede assertividade do time de QA.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Time-to-Insight</div>
+        <div class="glossary-def">Dias úteis entre o fechamento de um ciclo de monitoria e a entrega do relatório com plano de ação às lideranças.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Erro Crítico</div>
+        <div class="glossary-def">Erro com impacto direto ao cliente, regulatório ou financeiro (ex: fechar legítimo como fraudador). Maior peso na pontuação de qualidade.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Erro de Processo</div>
+        <div class="glossary-def">Erro operacional sem impacto direto ao cliente (ex: não inserir tag). Menor peso na pontuação.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Data Labeling (plataforma)</div>
+        <div class="glossary-def">Nova infraestrutura de monitoria integrada ao Shuffle. Substitui formulários manuais por dados rastreáveis, padronizados e confiáveis.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">RFC (Request for Comments)</div>
+        <div class="glossary-def">Documento de registro de projeto ou decisão técnica com contexto, alternativas, solução adotada e owner. Padrão de documentação do time.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Root Cause Analysis (RCA)</div>
+        <div class="glossary-def">Análise estruturada para identificar a causa raiz de padrões de erro — não só reportar o erro, mas entender por que acontece sistematicamente.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="next-steps">
+    <p class="section-label" style="margin-top:32px;">Próximos Passos</p>
+    <div class="steps-group">
+      <div class="steps-group-title">Infraestrutura e migração</div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Alinhar cronograma da migração da plataforma Data Labeling com o time parceiro (datas de piloto, rollout por distrito, go-live)</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Mapear campos obrigatórios da nova plataforma (incluindo taxonomia de erros e Alignment Rate)</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Definir pipeline de dados: quem constrói, onde fica, como alimenta relatórios</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Alinhar com time de IA/Data Labeling sobre configuração do modelo de Quality Audit — planejado para maio/2026</div></div>
+    </div>
+    <div class="steps-group">
+      <div class="steps-group-title">Baselines</div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Levantar % de ajustes retroativos por ciclo no SPOT (baseline KR 1.1)</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Levantar histórico de contestações válidas no JIRA Quality Requests (baseline KR 2.2)</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Calibrar % de cobertura da Quality Audit após piloto (baseline KR 2.1)</div></div>
+    </div>
+    <div class="steps-group">
+      <div class="steps-group-title">Documentação</div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Fazer inventário de todos os projetos e processos ativos do time</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Criar template de RFC padronizado</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Auditar Confluence e Drive: identificar documentos desatualizados, sem owner ou duplicados</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Definir estrutura de pastas padrão e ciclo de revisão</div></div>
+    </div>
+    <div class="steps-group">
+      <div class="steps-group-title">Validação e apresentação</div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Validar targets com liderança (Esau / Gui Serrano)</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Apresentar para os supers de InvOps BR e coletar feedback</div></div>
+      <div class="step-item" onclick="toggleStep(this)"><div class="step-checkbox"></div><div class="step-text">Criar tracker de BETs no JIRA/Confluence</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Quality Team · InvOps Brasil · H1 2026</strong><br>
+  Fontes: "2026 — M1 Quality Accuracy" (Esau Viana), OPS BR OKRs Q1 2026, histórico Quality Pack 2024/2025 · Gerado em 30/03/2026 · Atualizado em 29/04/2026 (KR 2.2: dados Q1 reais)
+</div>
+
+<script>
+  function toggle(el) { el.classList.toggle('open'); }
+  function toggleStep(el) { el.classList.toggle('done'); }
+</script>
+</body>
+</html>
