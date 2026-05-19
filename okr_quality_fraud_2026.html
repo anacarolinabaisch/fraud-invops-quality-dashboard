@@ -454,7 +454,9 @@
             <div class="kr-number">Key Result 2.3</div>
             <div class="kr-title">Manter rituais mensais de calibração com todos os distritos, atingindo ≥ 85% de Alignment Rate entre QAs</div>
             <div class="kr-chips">
-              <span class="chip chip-q2">A partir de Q2</span>
+              <span class="chip chip-q1">Q1 dados disponíveis</span>
+              <span class="chip chip-q2">Abr dados disponíveis</span>
+              <span class="chip chip-target">✓ Acima do stretch</span>
             </div>
           </div>
           <span class="kr-chevron">›</span>
@@ -463,10 +465,70 @@
           <div class="kr-details-layout">
             <div class="kr-left">
               <div class="kr-metric-grid">
-                <div class="kr-detail-box"><label>Baseline</label><span>A definir (levantamento Q1)</span></div>
-                <div class="kr-detail-box"><label>Meta</label><span>≥ 85% de Alignment Rate</span></div>
-                <div class="kr-detail-box"><label>Stretch</label><span>≥ 90%</span></div>
+                <div class="kr-detail-box"><label>Baseline Q1</label><span>Jan: 98,61% · Fev: 98,21% · Mar: 96,82%</span></div>
+                <div class="kr-detail-box"><label>Meta (Target)</label><span>≥ 85% de Alignment Rate</span></div>
+                <div class="kr-detail-box"><label>Stretch</label><span>≥ 90% de Alignment Rate</span></div>
               </div>
+
+              <!-- Monthly progress bars -->
+              <div style="margin-bottom:12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#6b7280;margin-bottom:8px;">Evolução Mensal — Alignment Rate (%)</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;font-weight:600;color:#374151;width:36px;">Jan</span>
+                    <div style="flex:1;background:#e5e7eb;border-radius:4px;height:10px;position:relative;">
+                      <div style="width:98.61%;background:#2563eb;border-radius:4px;height:10px;"></div>
+                      <div style="position:absolute;top:-3px;left:85%;width:2px;height:16px;background:#f59e0b;border-radius:1px;" title="Meta: 85%"></div>
+                      <div style="position:absolute;top:-3px;left:90%;width:2px;height:16px;background:#0d9488;border-radius:1px;" title="Stretch: 90%"></div>
+                    </div>
+                    <span style="font-size:12px;font-weight:700;color:#2563eb;width:46px;text-align:right;">98,61%</span>
+                  </div>
+
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;font-weight:600;color:#374151;width:36px;">Fev</span>
+                    <div style="flex:1;background:#e5e7eb;border-radius:4px;height:10px;position:relative;">
+                      <div style="width:98.21%;background:#2563eb;border-radius:4px;height:10px;"></div>
+                      <div style="position:absolute;top:-3px;left:85%;width:2px;height:16px;background:#f59e0b;border-radius:1px;"></div>
+                      <div style="position:absolute;top:-3px;left:90%;width:2px;height:16px;background:#0d9488;border-radius:1px;"></div>
+                    </div>
+                    <span style="font-size:12px;font-weight:700;color:#2563eb;width:46px;text-align:right;">98,21%</span>
+                  </div>
+
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;font-weight:600;color:#374151;width:36px;">Mar</span>
+                    <div style="flex:1;background:#e5e7eb;border-radius:4px;height:10px;position:relative;">
+                      <div style="width:96.82%;background:#2563eb;border-radius:4px;height:10px;"></div>
+                      <div style="position:absolute;top:-3px;left:85%;width:2px;height:16px;background:#f59e0b;border-radius:1px;"></div>
+                      <div style="position:absolute;top:-3px;left:90%;width:2px;height:16px;background:#0d9488;border-radius:1px;"></div>
+                    </div>
+                    <span style="font-size:12px;font-weight:700;color:#2563eb;width:46px;text-align:right;">96,82%</span>
+                  </div>
+
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;font-weight:600;color:#374151;width:36px;">Abr</span>
+                    <div style="flex:1;background:#e5e7eb;border-radius:4px;height:10px;position:relative;">
+                      <div style="width:97.61%;background:#2563eb;border-radius:4px;height:10px;"></div>
+                      <div style="position:absolute;top:-3px;left:85%;width:2px;height:16px;background:#f59e0b;border-radius:1px;"></div>
+                      <div style="position:absolute;top:-3px;left:90%;width:2px;height:16px;background:#0d9488;border-radius:1px;"></div>
+                    </div>
+                    <span style="font-size:12px;font-weight:700;color:#2563eb;width:46px;text-align:right;">97,61%</span>
+                  </div>
+
+                </div>
+                <div style="margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                  <div style="width:10px;height:10px;background:#2563eb;border-radius:2px;"></div>
+                  <span style="font-size:10px;color:#6b7280;">Real</span>
+                  <div style="width:10px;height:10px;background:#f59e0b;border-radius:2px;margin-left:8px;"></div>
+                  <span style="font-size:10px;color:#6b7280;">Meta ≥ 85%</span>
+                  <div style="width:10px;height:10px;background:#0d9488;border-radius:2px;margin-left:8px;"></div>
+                  <span style="font-size:10px;color:#6b7280;">Stretch ≥ 90%</span>
+                </div>
+                <div style="margin-top:8px;padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;font-size:11px;color:#1e3a5f;line-height:1.5;">
+                  🔵 Todos os meses acima do stretch (≥ 90%). Menor resultado em Mar (96,82%), recuperação em Abr (97,61%). Média H1 até agora: 97,81%.
+                </div>
+              </div>
+
               <div class="kr-explain">
                 Ritual de calibração "às cegas" (blind scoring): QAs avaliam as mesmas amostras de forma independente. Com a nova plataforma, o Alignment Rate é calculado automaticamente — garantindo que os feedbacks dados à operação são consistentes, independente de quem fez a monitoria.
               </div>
@@ -662,7 +724,7 @@
 
 <div class="footer">
   <strong>Quality Team · InvOps Brasil · H1 2026</strong><br>
-  Fontes: "2026 — M1 Quality Accuracy" (Esau Viana), OPS BR OKRs Q1 2026, histórico Quality Pack 2024/2025 · Gerado em 30/03/2026 · Atualizado em 29/04/2026 (KR 2.2: dados Q1 reais)
+  Fontes: "2026 — M1 Quality Accuracy" (Esau Viana), OPS BR OKRs Q1 2026, histórico Quality Pack 2024/2025 · Gerado em 30/03/2026 · Atualizado em 19/05/2026 (KR 2.3: dados Jan–Abr reais)
 </div>
 
 <script>
